@@ -6,13 +6,28 @@ namespace Northrook;
 
 use PhpCsFixer\{Config, Finder};
 
-function standards( Finder $finder, array $rules = [] ) : Config
+/**
+ * @param string|string[]  $in  `__DIR__`
+ * @param string|string[]  $exclude
+ * @param array            $rules
+ *
+ * @return \PhpCsFixer\Config
+ */
+function standards(
+        string | array $in,
+        array          $rules = [],
+        string | array $exclude = [ 'vendor', 'var', 'tests', ],
+) : Config
 {
+    $finder = Finder::create()
+                    ->in( $in )
+                    ->exclude( $exclude );
+
     $config = new Config( 'northrook' );
 
-    $config->setFinder( $finder )
-           ->setRules( \array_merge( require __DIR__ . '/rules.php', $rules ) )
-           ->setRiskyAllowed( true );
+    $rules = \array_merge( require __DIR__ . '/rules.php', $rules );
 
-    return $config;
+    return $config->setFinder( $finder )
+                  ->setRules( $rules )
+                  ->setRiskyAllowed( true );
 }
