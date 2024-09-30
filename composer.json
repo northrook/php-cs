@@ -22,5 +22,8 @@
   "require": {
     "php": ">=8.3",
     "friendsofphp/php-cs-fixer": "@stable"
-  }
+  },
+  "post-update-cmd": [
+    "php -r \"var_dump(__DIR__);\""
+  ]
 }
