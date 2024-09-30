@@ -2,7 +2,7 @@
 
 return [
     // Each line of multi-line DocComments must have an asterisk [PSR-5] and must be aligned with the first one.
-    'align_multiline_comment'                       => [ 'comment_type' => 'all_multiline' ],
+    'align_multiline_comment'                       => ['comment_type' => 'all_multiline'],
     // Each element of an array must be indented exactly once.
     'array_indentation'                             => true,
     // PHP arrays should be declared using the configured syntax.
@@ -13,24 +13,24 @@ return [
     // PHP attributes declared without arguments must (not) be followed by empty parentheses.
     'attribute_empty_parentheses'                   => true,
     // Binary operators should be surrounded by space as configured.
-    'binary_operator_spaces'                        => [ 'default' => 'align_single_space_minimal_by_scope' ],
+    'binary_operator_spaces'                        => ['default' => 'align_single_space_minimal_by_scope'],
     // There MUST be one blank line after the namespace declaration.
     'blank_line_after_namespace'                    => true,
     // Ensure there is no code on the same line as the PHP open tag and it is followed by a blank line.
     'blank_line_after_opening_tag'                  => true,
     // An empty line feed must precede any configured statement.
     'blank_line_before_statement'                   => [
-            'statements' => [
-                    'break',
-                    'continue',
-                    'declare',
-                    'exit',
-                    'foreach',
-                    // 'return',
-            ],
+        'statements' => [
+            'break',
+            'continue',
+            'declare',
+            'exit',
+            'foreach',
+            // 'return',
+        ],
     ],
     // Controls blank lines before a namespace declaration.
-    'blank_lines_before_namespace'                  => [ 'min_line_breaks' => 1 ],
+    'blank_lines_before_namespace'                  => ['min_line_breaks' => 1],
     // Braces must be placed as configured.
     'braces_position'                               => true,
     // A single space or none should be between cast and variable.
@@ -56,7 +56,7 @@ return [
     // The body of each control structure MUST be enclosed within braces.
     'control_structure_braces'                      => true,
     // Control structure continuation keyword must be on the configured line.
-    'control_structure_continuation_position'       => [ 'position' => 'next_line' ],
+    'control_structure_continuation_position'       => ['position' => 'next_line'],
     // Equal sign in declare statement should be surrounded by spaces or not following configuration.
     'declare_equal_normalize'                       => true,
     // There must not be spaces around `declare` statement parentheses.
@@ -74,7 +74,7 @@ return [
     // The keyword `elseif` should be used instead of `else if` so that all control keywords look like single words.
     'elseif'                                        => true,
     // Empty loop-body must be in configured style.
-    'empty_loop_body'                               => [ 'style' => 'braces' ],
+    'empty_loop_body'                               => ['style' => 'braces'],
     // Empty loop-condition must be in configured style.
     'empty_loop_condition'                          => true,
     // PHP code MUST use only UTF-8 without BOM (remove BOM).
@@ -88,19 +88,19 @@ return [
     // PHP code must use the long `<?php` tags or short-echo `<?=` tags and not other tag variations.
     'full_opening_tag'                              => true,
     // Removes the leading part of fully qualified symbol references if a given symbol is imported or belongs to the current namespace.
-    'fully_qualified_strict_types'                  => [ 'leading_backslash_in_global_namespace' => true ],
+    'fully_qualified_strict_types'                  => ['leading_backslash_in_global_namespace' => true],
     // Spaces should be properly placed in a function declaration.
     'function_declaration'                          => [
-            'closure_fn_spacing'       => 'none',
-            'closure_function_spacing' => 'none',
+        'closure_fn_spacing'       => 'none',
+        'closure_function_spacing' => 'none',
     ],
     // Replace `get_class` calls on object variables with class keyword syntax.
     'get_class_to_class_keyword'                    => true,
     // Imports or fully qualifies global classes/functions/constants.
     'global_namespace_import'                       => [
-            'import_classes'   => false,
-            'import_constants' => false,
-            'import_functions' => false,
+        'import_classes'   => false,
+        'import_constants' => false,
+        'import_functions' => false,
     ],
     // There MUST be group use for the same namespaces.
     'group_import'                                  => true,
@@ -117,7 +117,7 @@ return [
     // Include/Require and file path should be divided with a single space. File path should not be placed within parentheses.
     'include'                                       => true,
     // Pre- or post-increment and decrement operators should be used if possible.
-    'increment_style'                               => [ 'style' => 'post' ],
+    'increment_style'                               => ['style' => 'post'],
     // Code MUST use configured indentation type.
     'indentation_type'                              => true,
     // Integer literals must be in correct case.
@@ -140,8 +140,8 @@ return [
     'magic_method_casing'                           => true,
     // In method arguments and method call, there MUST NOT be a space before each comma and there MUST be one space after each comma. Argument lists MAY be split across multiple lines, where each subsequent line is indented once. When doing so, the first item in the list MUST be on the next line, and there MUST be only one argument per line.
     'method_argument_space'                         => [
-            'attribute_placement'              => 'same_line',
-            'keep_multiple_spaces_after_comma' => false,
+        'attribute_placement'              => 'same_line',
+        'keep_multiple_spaces_after_comma' => false,
     ],
     // Method chaining MUST be properly indented. Method chaining with different levels of indentation is not supported.
     'method_chaining_indentation'                   => true,
@@ -166,7 +166,7 @@ return [
     // There should not be blank lines between docblock and the documented element.
     'no_blank_lines_after_phpdoc'                   => true,
     // There must be a comment when fall-through is intentional in a non-empty case body.
-    'no_break_comment'                              => [ 'comment_text' => ':no break' ],
+    'no_break_comment'                              => ['comment_text' => ':no break'],
     // The closing `? >` tag MUST be omitted from files containing only PHP.
     'no_closing_tag'                                => true,
     // Remove useless (semicolon) statements.
@@ -189,10 +189,10 @@ return [
     'no_spaces_after_function_name'                 => true,
     // There MUST NOT be spaces around offset braces.
     'no_spaces_around_offset'                       => [
-            'positions' => [
-                    'inside',
-                    'outside',
-            ],
+        'positions' => [
+            'inside',
+            'outside',
+        ],
     ],
     // Replaces superfluous `elseif` with `if`.
     'no_superfluous_elseif'                         => true,
@@ -237,9 +237,9 @@ return [
     // Operators - when multiline - must always be at the beginning or at the end of the line.
     'operator_linebreak'                            => true,
     // PHPDoc should contain `@param` for all params.
-    'phpdoc_add_missing_param_annotation'           => [ 'only_untyped' => false ],
+    'phpdoc_add_missing_param_annotation'           => ['only_untyped' => false],
     // All items of the given PHPDoc tags must be either left-aligned or (by default) aligned vertically.
-    'phpdoc_align'                                  => [ 'align' => 'vertical' ],
+    'phpdoc_align'                                  => ['align' => 'vertical'],
     // PHPDoc annotation descriptions should not be a sentence.
     'phpdoc_annotation_without_dot'                 => true,
     // Docblocks should have the same indentation as the documented subject.
@@ -248,9 +248,9 @@ return [
     'phpdoc_inline_tag_normalizer'                  => true,
     // Changes doc blocks from single to multi line, or reversed. Works for class constants, properties and methods only.
     'phpdoc_line_span'                              => [
-            'const'    => 'single',
-            'method'   => 'multi',
-            'property' => 'single',
+        'const'    => 'single',
+        'method'   => 'multi',
+        'property' => 'single',
     ],
     // No alias PHPDoc tags should be used.
     'phpdoc_no_alias_tag'                           => true,
@@ -285,7 +285,7 @@ return [
     // `@var` and `@type` annotations of classy properties should not contain the name.
     'phpdoc_var_without_name'                       => true,
     // Adjust spacing around colon in return type declarations and backed enum types.
-    'return_type_declaration'                       => [ 'space_before' => 'one' ],
+    'return_type_declaration'                       => ['space_before' => 'one'],
     // Inside an enum or `final`/anonymous class, `self` should be preferred over `static`.
     'self_static_accessor'                          => true,
     // Instructions must be terminated with a semicolon.
@@ -319,7 +319,7 @@ return [
     // Fix whitespace after a semicolon.
     'space_after_semicolon'                         => true,
     // Parentheses must be declared using the configured whitespace.
-    'spaces_inside_parentheses'                     => [ 'space' => 'single' ],
+    'spaces_inside_parentheses'                     => ['space' => 'single'],
     // Increment and decrement operators should be used if possible.
     'standardize_increment'                         => true,
     // Replace all `<>` with `!=`.
@@ -338,12 +338,12 @@ return [
     'ternary_to_null_coalescing'                    => true,
     // Arguments lists, array destructuring lists, arrays that are multi-line, `match`-lines and parameters lists must have a trailing comma.
     'trailing_comma_in_multiline'                   => [
-            'elements' => [
-                    'arguments',
-                    'arrays',
-                    'match',
-                    'parameters',
-            ],
+        'elements' => [
+            'arguments',
+            'arrays',
+            'match',
+            'parameters',
+        ],
     ],
     // Ensure single space between a variable and its type declaration in function arguments and properties.
     'type_declaration_spaces'                       => true,
@@ -354,7 +354,7 @@ return [
     // Visibility MUST be declared on all properties and methods; `abstract` and `final` MUST be declared before the visibility; `static` MUST be declared after the visibility.
     'visibility_required'                           => true,
     // In array declaration, there MUST be a whitespace after each comma.
-    'whitespace_after_comma_in_array'               => [ 'ensure_single_space' => true ],
+    'whitespace_after_comma_in_array'               => ['ensure_single_space' => true],
     // Write conditions in Yoda style (`true`), non-Yoda style (`['equal' => false, 'identical' => false, 'less_and_greater' => false]`) or ignore those conditions (`null`) based on configuration.
-    'yoda_style'                                    => [ 'always_move_variable' => true ],
+    'yoda_style'                                    => ['always_move_variable' => true],
 ];
