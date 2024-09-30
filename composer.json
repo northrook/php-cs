@@ -1,0 +1,26 @@
+{
+  "name": "northrook/php-cs",
+  "description": "Custom PHP Coding Standards for Northrook projects. ",
+  "tag": [
+    "dev"
+  ],
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Martin",
+      "email": "mn@northrook.com"
+    }
+  ],
+  "autoload": {
+    "files": [
+      "./src/standards.php"
+    ]
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "require": {
+    "php": ">=8.3",
+    "friendsofphp/php-cs-fixer": "@stable"
+  }
+}
