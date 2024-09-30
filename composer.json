@@ -1,7 +1,7 @@
 {
   "name": "northrook/php-cs",
   "description": "Custom PHP Coding Standards for Northrook projects. ",
-  "tag": [
+  "keywords": [
     "dev"
   ],
   "type": "library",
@@ -22,8 +22,5 @@
   "require": {
     "php": ">=8.3",
     "friendsofphp/php-cs-fixer": "@stable"
-  },
-  "post-update-cmd": [
-    "php -r \"var_dump(__DIR__);\""
-  ]
+  }
 }
