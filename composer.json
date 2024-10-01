@@ -21,6 +21,7 @@
   "prefer-stable": true,
   "require": {
     "php": ">=8.3",
-    "friendsofphp/php-cs-fixer": "@stable"
+    "friendsofphp/php-cs-fixer": "@stable",
+    "erickskrauch/php-cs-fixer-custom-fixers": "^1.3"
   }
 }

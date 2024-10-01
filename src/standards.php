@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Northrook;
 
 use PhpCsFixer\{Config, Finder};
+use ErickSkrauch\PhpCsFixer\Fixers;
 
 /**
  * @param string|string[] $in      `__DIR__`
@@ -23,6 +24,8 @@ function standards(
         ->exclude( $exclude );
 
     $config = new Config( 'northrook' );
+
+    $config->registerCustomFixers( new Fixers() );
 
     $rules  = \array_merge( require __DIR__.'/rules.php', $rules );
 
