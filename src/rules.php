@@ -104,20 +104,19 @@ return [
     ],
     // Replace `get_class` calls on object variables with class keyword syntax.
     'get_class_to_class_keyword' => true,
+    // There MUST be group use for the same namespaces.
+    'group_import' => true,
     // Imports or fully qualifies global classes/functions/constants.
     'global_namespace_import' => [
         'import_classes'   => true,
         'import_constants' => true,
-        'import_functions' => true,
+        'import_functions' => false, // using 'native_function_invocation' => include@all
     ],
-    // There MUST be group use for the same namespaces.
-    'group_import' => true,
-    // Add, replace or remove header comment.
-    // 'header_comment'                                => [
-    //     'comment_type' => 'PHPDoc',
-    //     'header'       => 'Proper header Content string',
-    //     'location'     => 'after_open',
-    // ],
+    // Add leading `\` before function invocation to speed up resolving.
+    'native_function_invocation' => [
+        'include' => ['@all'],
+        'scope'   => 'namespaced',
+    ],
     // Heredoc/nowdoc content must be properly indented.
     'heredoc_indentation' => true,
     // Convert `heredoc` to `nowdoc` where possible.
@@ -353,8 +352,6 @@ return [
             'parameters',
         ],
     ],
-    // Add leading `\` before function invocation to speed up resolving.
-    'native_function_invocation' => true,
     // Ensure single space between a variable and its type declaration in function arguments and properties.
     'type_declaration_spaces' => true,
     // A single space or none should be around union type and intersection type operators.

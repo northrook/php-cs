@@ -16,7 +16,7 @@ use ErickSkrauch\PhpCsFixer\Fixers;
  */
 function standards(
     string|array $in,
-    array $rules = [],
+    array        $rules = [],
     string|array $exclude = ['vendor', 'var', 'tests'],
 ) : Config {
     $finder = Finder::create()
@@ -27,7 +27,7 @@ function standards(
 
     $config->registerCustomFixers( new Fixers() );
 
-    $rules  = \array_merge( require __DIR__.'/rules.php', $rules );
+    $rules = \array_merge( require __DIR__.'/rules.php', $rules );
 
     return $config->setFinder( $finder )
         ->setRules( $rules )
