@@ -353,6 +353,8 @@ return [
             'parameters',
         ],
     ],
+    // Add leading `\` before function invocation to speed up resolving.
+    'native_function_invocation' => true,
     // Ensure single space between a variable and its type declaration in function arguments and properties.
     'type_declaration_spaces' => true,
     // A single space or none should be around union type and intersection type operators.
