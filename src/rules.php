@@ -1,5 +1,7 @@
 <?php
 
+$global_functions = get_defined_functions()['internal'];
+
 return [
 
     // @ErickSkrauch fixers
@@ -114,7 +116,7 @@ return [
     ],
     // Add leading `\` before function invocation to speed up resolving.
     'native_function_invocation' => [
-        'include' => ['@all'],
+        'include' => $global_functions,
         'scope'   => 'namespaced',
     ],
     // Heredoc/nowdoc content must be properly indented.
