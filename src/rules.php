@@ -106,9 +106,9 @@ return [
     'get_class_to_class_keyword' => true,
     // Imports or fully qualifies global classes/functions/constants.
     'global_namespace_import' => [
-        'import_classes'   => false,
-        'import_constants' => false,
-        'import_functions' => false,
+        'import_classes'   => true,
+        'import_constants' => true,
+        'import_functions' => true,
     ],
     // There MUST be group use for the same namespaces.
     'group_import' => true,
