@@ -26,7 +26,7 @@ return [
     'binary_operator_spaces' => ['default' => 'align_single_space_minimal'],
     // There MUST be one blank line after the namespace declaration.
     'blank_line_after_namespace' => true,
-    // Ensure there is no code on the same line as the PHP open tag and it is followed by a blank line.
+    // Ensure there is no code on the same line as the PHP open tag, and it is followed by a blank line.
     'blank_line_after_opening_tag' => true,
     // An empty line feed must precede any configured statement.
     'blank_line_before_statement' => [
@@ -79,7 +79,7 @@ return [
     'doctrine_annotation_indentation' => true,
     // Fixes spaces in Doctrine annotations.
     'doctrine_annotation_spaces' => true,
-    // Replaces short-echo `<?=` with long format `<?php echo`/`<?php print` syntax, or vice-versa.
+    // Replaces short-echo `<?=` with long format `<?php echo`/`<?php print` syntax, or vice versa.
     'echo_tag_syntax' => true,
     // The keyword `elseif` should be used instead of `else if` so that all control keywords look like single words.
     'elseif' => true,
@@ -192,7 +192,7 @@ return [
     'no_null_property_initialization' => true,
     // Short cast `bool` using double exclamation mark should not be used.
     'no_short_bool_cast' => true,
-    // There must be no space around double colons (also called Scope Resolution Operator or Paamayim Nekudotayim).
+    // There must be no space around double colons (Scope Resolution Operator).
     'no_space_around_double_colon' => true,
     // When making a method or function call, there MUST NOT be a space between the method or function name and the opening parenthesis.
     'no_spaces_after_function_name' => true,
