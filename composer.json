@@ -22,6 +22,11 @@
   "require": {
     "php": ">=8.3",
     "friendsofphp/php-cs-fixer": "@stable",
-    "erickskrauch/php-cs-fixer-custom-fixers": "^1.3"
+    "erickskrauch/php-cs-fixer-custom-fixers": "^1.3",
+    "phpstan/phpstan": "@stable",
+    "jetbrains/phpstorm-attributes": "@stable"
+  },
+  "scripts": {
+    "phpstan": "vendor/bin/phpstan analyse"
   }
 }
