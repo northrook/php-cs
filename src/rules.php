@@ -274,7 +274,7 @@ return [
     // Single line `@var` PHPDoc should have proper spacing.
     'phpdoc_single_line_var_spacing' => true,
     // PHPDoc summary should end in either a full stop, exclamation mark, or question mark.
-    'phpdoc_summary' => true,
+    'phpdoc_summary' => false,
     // Fixes casing of PHPDoc tags.
     'phpdoc_tag_casing' => true,
     // Forces PHPDoc tags to be either regular annotations or inline.
