@@ -318,7 +318,7 @@ return [
     // Single-line comments and multi-line comments with only one line of actual content should use the `//` syntax.
     'single_line_comment_style' => true,
     // Empty body of class, interface, trait, enum or function must be abbreviated as `{}` and placed on the same line as the previous symbol, separated by a single space.
-    'single_line_throw' => true,
+    'single_line_throw' => false,
     // Convert double quotes to single quotes for simple strings.
     'single_quote' => true,
     // Ensures a single space after language constructs.
