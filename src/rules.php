@@ -104,6 +104,8 @@ return [
         'closure_fn_spacing'       => 'none',
         'closure_function_spacing' => 'none',
     ],
+    // Allow empty functions and methods to be single lines
+    'single_line_empty_body' => true,
     // Replace `get_class` calls on object variables with class keyword syntax.
     'get_class_to_class_keyword' => true,
     // There MUST be group use for the same namespaces.
