@@ -151,8 +151,7 @@ return [
     'magic_method_casing' => true,
     // In method arguments and method call, there MUST NOT be a space before each comma and there MUST be one space after each comma. Argument lists MAY be split across multiple lines, where each subsequent line is indented once. When doing so, the first item in the list MUST be on the next line, and there MUST be only one argument per line.
     'method_argument_space' => [
-        'attribute_placement'              => 'same_line',
-        'keep_multiple_spaces_after_comma' => false,
+        'attribute_placement' => 'standalone',
     ],
     // Method chaining MUST be properly indented. Method chaining with different levels of indentation is not supported.
     'method_chaining_indentation' => true,
