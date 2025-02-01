@@ -94,7 +94,11 @@ return [
     // Converts implicit variables into explicit ones in double-quoted strings or heredoc syntax.
     'explicit_string_variable' => true,
     // Internal classes should be `final`.
-    'final_internal_class' => true,
+    'final_internal_class' => [
+        'include'                                    => ['@final'],
+        'exclude'                                    => ['@abstract'],
+        'consider_absent_docblock_as_internal_class' => false,
+    ],
     // PHP code must use the long `<?php` tags or short-echo `<?=` tags and not other tag variations.
     'full_opening_tag' => true,
     // Removes the leading part of fully qualified symbol references if a given symbol is imported or belongs to the current namespace.
@@ -364,5 +368,9 @@ return [
     // In array declaration, there MUST be a whitespace after each comma.
     'whitespace_after_comma_in_array' => ['ensure_single_space' => true],
     // Write conditions in Yoda style (`true`), non-Yoda style (`['equal' => false, 'identical' => false, 'less_and_greater' => false]`) or ignore those conditions (`null`) based on configuration.
-    'yoda_style' => ['always_move_variable' => true],
+    'yoda_style' => [
+        'equal'            => false,
+        'identical'        => false,
+        'less_and_greater' => false,
+    ],
 ];
