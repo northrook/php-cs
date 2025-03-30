@@ -94,6 +94,7 @@ return [
     // Converts implicit variables into explicit ones in double-quoted strings or heredoc syntax.
     'explicit_string_variable' => true,
     // Internal classes should be `final`.
+    'final_class'          => false,
     'final_internal_class' => false,
     // PHP code must use the long `<?php` tags or short-echo `<?=` tags and not other tag variations.
     'full_opening_tag' => true,

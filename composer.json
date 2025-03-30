@@ -13,6 +13,7 @@
     }
   ],
   "autoload": {
+    "Northrook\\Standards\\": "src",
     "files": [
       "./src/standards.php"
     ]
