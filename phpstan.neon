@@ -1,4 +1,4 @@
-parameters:
-	level: 9
-	paths:
-		- src
+services:
+	-
+		class: Northrook\PHPStan\RequiresMethodRule
+		tags: [phpstan.rules.rule]
