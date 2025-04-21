@@ -13,8 +13,8 @@
     }
   ],
   "autoload": {
-    "psr-4" : {
-      "Northrook\\" : "src"
+    "psr-4": {
+      "Northrook\\": "src"
     },
     "files": [
       "./src/standards.php"
@@ -31,12 +31,5 @@
   },
   "scripts": {
     "phpstan": "vendor/bin/phpstan analyse"
-  },
-  "extra": {
-    "phpstan": {
-      "includes": [
-        "phpstan.neon"
-      ]
-    }
   }
 }
