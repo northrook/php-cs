@@ -1,3 +1,5 @@
+rules:
+	- Northrook\PHPStan\RequiresMethodRule
 services:
 	-
 		class: Northrook\PHPStan\RequiresMethodRule

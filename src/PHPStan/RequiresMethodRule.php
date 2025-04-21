@@ -4,9 +4,9 @@ namespace Northrook\PHPStan;
 
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
-use PHPStan\Rules\Rule;
-use PHPStan\PhpDoc\{PhpDocStringResolver};
-use PHPStan\Reflection\{ReflectionProvider};
+use PHPStan\PhpDoc\PhpDocStringResolver;
+use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Rules\{Rule, RuleErrorBuilder};
 
 class RequiresMethodRule implements Rule
 {
@@ -25,6 +25,7 @@ class RequiresMethodRule implements Rule
      * @param Scope $scope
      *
      * @return array|\PHPStan\Rules\IdentifierRuleError[]
+     * @throws \PHPStan\ShouldNotHappenException
      */
     public function processNode( Node $node, Scope $scope ) : array
     {
@@ -35,21 +36,60 @@ class RequiresMethodRule implements Rule
         $className       = (string) $node->namespacedName;
         $classReflection = $this->reflectionProvider->getClass( $className );
 
-        $doc    = $node->getDocComment()?->getText() ?? '';
-        $phpDoc = $this->phpDocResolver->resolve( $doc, $scope->getFile(), null, null );
-
-        $tags   = $phpDoc->getTagsByName( '@phpstan-requires-method' );
-        $errors = [];
-
-        foreach ( $tags as $tag ) {
-            $content                   = \trim( (string) $tag->value );
-            [$returnType, $methodName] = \explode( ' ', $content, 2 );
-
-            if ( ! $classReflection->hasMethod( $methodName ) ) {
-                $errors[] = "Class {$className} is missing required method `{$methodName}`.";
-            }
+        if ( $classReflection->isAbstract() ) {
+            return [];
         }
 
-        return $errors;
+        $doc     = $classReflection->getResolvedPhpDoc();
+        $comment = false;
+
+        if ( ! $doc ) {
+            foreach ( $classReflection->getParents() as $parent ) {
+                $parentDoc = $parent->getResolvedPhpDoc();
+                if ( ! $parentDoc ) {
+                    continue;
+                }
+
+                $comment = $parentDoc->getPhpDocString();
+                if ( ! $comment || ! \str_contains( $comment, '@require-method' ) ) {
+                    continue;
+                }
+            }
+        }
+        else {
+            $comment = $doc->getPhpDocString();
+        }
+
+        if ( ! $comment || ! \str_contains( $comment, '@require-method' ) ) {
+            return [];
+        }
+
+        $phpDoc = $this->phpDocResolver->resolve(
+            $comment,
+            $scope->getFile(),
+            null,
+            null,
+        );
+
+        $requiresMethod = \trim( $phpDoc->getTagsByName( '@require-method' )[0]->value );
+
+        if ( \str_contains( $requiresMethod, ' ' ) ) {
+            [$returnType, $methodName] = \explode( ' ', $requiresMethod, 2 );
+        }
+        else {
+            $returnType = null;
+            $methodName = $requiresMethod;
+        }
+
+        $methodName = \strstr( $methodName, '(', true ) ?: $methodName;
+
+        if ( ! $classReflection->hasMethod( $methodName ) ) {
+            return [
+                RuleErrorBuilder::message( "Class {$className} is missing required method `{$methodName}`." )
+                    ->identifier( 'northrook.class.requires.method' )
+                    ->build(),
+            ];
+        }
+        return [];
     }
 }
