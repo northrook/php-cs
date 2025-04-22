@@ -8,7 +8,7 @@ use PHPStan\PhpDoc\PhpDocStringResolver;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\{Rule, RuleErrorBuilder};
 
-class RequiresMethodRule implements Rule
+readonly class RequiresMethodRule implements Rule
 {
     public function __construct(
         private ReflectionProvider   $reflectionProvider,
@@ -40,56 +40,55 @@ class RequiresMethodRule implements Rule
             return [];
         }
 
-        $doc     = $classReflection->getResolvedPhpDoc();
-        $comment = false;
+        $doc      = $classReflection->getResolvedPhpDoc();
+        $comment  = $doc?->getPhpDocString() ?? null;
+        $required = [];
 
-        if ( ! $doc ) {
-            foreach ( $classReflection->getParents() as $parent ) {
-                $parentDoc = $parent->getResolvedPhpDoc();
-                if ( ! $parentDoc ) {
-                    continue;
-                }
+        if ( $comment && \str_contains( $comment, '@require-method' ) ) {
+            $required[] = $comment;
+        }
 
-                $comment = $parentDoc->getPhpDocString();
-                if ( ! $comment || ! \str_contains( $comment, '@require-method' ) ) {
-                    continue;
-                }
+        foreach ( $classReflection->getParents() as $parent ) {
+            $parentDoc = $parent->getResolvedPhpDoc();
+            if ( ! $parentDoc ) {
+                continue;
+            }
+
+            $comment = $parentDoc->getPhpDocString();
+            if ( $comment && \str_contains( $comment, '@require-method' ) ) {
+                $required[] = $comment;
             }
         }
-        else {
-            $comment = $doc->getPhpDocString();
+
+        $errors = [];
+
+        foreach ( $required as $requiredDoc ) {
+            $phpDoc         = $this->phpDocResolver->resolve( $requiredDoc );
+            $docNode        = $phpDoc->getTagsByName( '@require-method' );
+            $requiresMethod = \trim( \array_pop( $docNode )->value );
+
+            if ( \str_contains( $requiresMethod, ' ' ) ) {
+                [$returnType, $methodName] = \explode( ' ', $requiresMethod, 2 );
+            }
+            else {
+                $returnType = null;
+                $methodName = $requiresMethod;
+            }
+            $methodName = \strstr( $methodName, '(', true ) ?: '$methodName';
+
+            if ( $classReflection->hasMethod( $methodName ) || \array_key_exists( $methodName, $errors ) ) {
+                continue;
+            }
+            $error = RuleErrorBuilder::message(
+                "Method {$methodName}() is required by {$className}.",
+            )
+                ->identifier( 'requireMethod.notFound' )
+                ->nonIgnorable()
+                ->build();
+
+            $errors[$methodName] = $error;
         }
 
-        if ( ! $comment || ! \str_contains( $comment, '@require-method' ) ) {
-            return [];
-        }
-
-        $phpDoc = $this->phpDocResolver->resolve(
-            $comment,
-            $scope->getFile(),
-            null,
-            null,
-        );
-
-        $requiresMethod = \trim( $phpDoc->getTagsByName( '@require-method' )[0]->value );
-
-        if ( \str_contains( $requiresMethod, ' ' ) ) {
-            [$returnType, $methodName] = \explode( ' ', $requiresMethod, 2 );
-        }
-        else {
-            $returnType = null;
-            $methodName = $requiresMethod;
-        }
-
-        $methodName = \strstr( $methodName, '(', true ) ?: $methodName;
-
-        if ( ! $classReflection->hasMethod( $methodName ) ) {
-            return [
-                RuleErrorBuilder::message( "Class {$className} is missing required method `{$methodName}`." )
-                    ->identifier( 'northrook.class.requires.method' )
-                    ->build(),
-            ];
-        }
-        return [];
+        return $errors;
     }
 }

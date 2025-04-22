@@ -31,5 +31,12 @@
   },
   "scripts": {
     "phpstan": "vendor/bin/phpstan analyse"
+  },
+  "extra": {
+    "phpstan": {
+      "includes": [
+        "phpstan.neon"
+      ]
+    }
   }
 }
