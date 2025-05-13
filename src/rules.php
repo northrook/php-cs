@@ -108,7 +108,7 @@ return [
     // Allow empty functions and methods to be single lines
     'single_line_empty_body' => true,
     // Replace `get_class` calls on object variables with class keyword syntax.
-    'get_class_to_class_keyword' => true,
+    'get_class_to_class_keyword' => false,
     // There MUST be group use for the same namespaces.
     'group_import' => true,
     // Imports or fully qualifies global classes/functions/constants.
