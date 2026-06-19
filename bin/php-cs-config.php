@@ -139,7 +139,7 @@ $mergeString($consumerComposer['scripts'], 'fmt', $fmtScript, 'scripts.fmt');
 
 if ($composerChanged) {
     $json = \json_encode($consumerComposer, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
-    $json = \preg_replace(['/\t/gm', '/^    /m'], ['    ', '  '], $json);
+    $json = \preg_replace(['/\t/m', '/^    /m'], ['    ', '  '], $json);
 
     if ($json === null || ! \is_string($json)) {
         \fwrite(STDERR, "Failed to encode composer.json.\n");
