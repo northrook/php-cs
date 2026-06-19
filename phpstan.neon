@@ -1,8 +1,13 @@
 parameters:
 	level: 9
 	paths:
-		- src
+		- %currentWorkingDirectory%/src
+		- %currentWorkingDirectory%/tests
+	excludePaths:
+		- %currentWorkingDirectory%/tests/Cases/**
+		- %currentWorkingDirectory%/var/*
 	treatPhpDocTypesAsCertain: false
-	reportUnmatchedIgnoredErrors: false
 rules:
-	- Northrook\PHPStan\RequiresMethodRule
+	- Northrook\Dev\PHPStan\ClassRequiresMemberRule
+	- Northrook\Dev\PHPStan\InterfaceRequiresMemberRule
+	- Northrook\Dev\PHPStan\LooseAbstractMemberRule

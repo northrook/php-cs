@@ -1,11 +1,12 @@
 {
   "name": "northrook/php-cs",
-  "description": "Custom PHP Coding Standards for Northrook projects. ",
+  "type": "phpstan-extension",
+  "description": "Custom PHP Coding Standards for Northrook projects.",
+  "version": "0.5.0",
+  "license": "BSD-3-Clause",
   "keywords": [
     "dev"
   ],
-  "type": "library",
-  "license": "MIT",
   "authors": [
     {
       "name": "Martin",
@@ -14,29 +15,47 @@
   ],
   "autoload": {
     "psr-4": {
-      "Northrook\\": "src"
-    },
-    "files": [
-      "./src/standards.php"
-    ]
+      "Northrook\\Dev\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests"
+    }
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
+  "bin": [
+    "bin/php-cs-config.php"
+  ],
   "require": {
-    "php": ">=8.2",
-    "friendsofphp/php-cs-fixer": "@stable",
-    "erickskrauch/php-cs-fixer-custom-fixers": "@stable",
-    "phpstan/phpstan": "@stable",
-    "jetbrains/phpstorm-attributes": "@stable"
+    "php": ">=8.4",
+    "phpstan/phpstan": "^2.2"
+  },
+  "require-dev": {
+    "phpstan/extension-installer": "^1.4",
+    "phpunit/phpunit": "^13.2"
   },
   "scripts": {
-    "phpstan": "vendor/bin/phpstan analyse"
+    "php-cs-config": "php-cs-config.php",
+    "phpstan": "vendor/bin/phpstan analyse",
+    "test": "vendor/bin/phpunit",
+    "fmt": "dprint fmt",
+    "check": [
+      "@phpstan",
+      "@test"
+    ]
   },
   "extra": {
     "phpstan": {
       "includes": [
         "phpstan.neon"
       ]
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "phpstan/extension-installer": true
     }
   }
 }

@@ -1,11 +1,13 @@
-# PHPStorm
+### Editor
+/.ide/
 /.idea/
+*.code-workspace
 
-# Composer
-/vendor/
-/composer.phar
-
-# Build data
-.env
-*.lock
-*.cache
+### Dev
+/.dev/
+/vendor
+/console
+/index.php
+/*.cache
+/.env
+/.phpunit.cache
