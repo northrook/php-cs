@@ -46,13 +46,6 @@
       "@test"
     ]
   },
-  "extra": {
-    "phpstan": {
-      "includes": [
-        "phpstan.neon"
-      ]
-    }
-  },
   "config": {
     "allow-plugins": {
       "phpstan/extension-installer": true

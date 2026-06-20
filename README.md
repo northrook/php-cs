@@ -14,7 +14,7 @@ The conventions here prioritize ergonomics over PSR alignment.
 
 - PHP 8.4+
 - [Composer](https://getcomposer.org/)
-- [dPrint CLI](https://dprint.dev/install/)
+- [dPrint CLI](https://dprint.dev/install/) (optional, for formatting)
 - [PHPStan](https://phpstan.org/) `2.2+`
 
 ## Installation
@@ -30,33 +30,21 @@ Add the package, then run the setup script from your project root:
 ```bash
 composer require --dev northrook/php-cs
 vendor/bin/php-cs-config.php
+composer update
 ```
 
-The script copies the shared `dprint.json`, and updates `composer.json`:
+The script copies shared `dprint.json` and `phpstan.neon` into the project root, and updates `composer.json`:
 
+- `require-dev` `phpstan/phpstan`
 - `require-dev` `phpstan/extension-installer`
 - `config.allow-plugins` `phpstan/extension-installer`
 - `scripts.phpstan` `vendor/bin/phpstan analyse`
-- `scripts.fmt` `dprint fmt`
 
-Pass `--force` to overwrite an existing `dprint.json` or refresh values that were already set.
-
-Install the [dPrint CLI](https://dprint.dev/install/) before using `composer fmt`.
+Pass `--force` to overwrite existing config files or refresh values that were already set.
 
 ### PHPStan
 
-With `phpstan/extension-installer`, this package registers itself automatically.
-
-Your project only needs a minimal `phpstan.neon` at the root if you want project-specific overrides.
-
-Otherwise, PHPStan will pick up the extension config on its own.
-
-If you prefer not to use the extension installer, include the config manually:
-
-```neon
-includes:
-	- vendor/northrook/php-cs/phpstan.neon
-```
+The setup script copies `phpstan.neon` to the project root. Edit it there for project-specific overrides.
 
 The shipped config enforces **level `9`**, and analyses `./src` and `./tests`.
 
@@ -73,12 +61,6 @@ Install the [dPrint CLI](https://dprint.dev/install/).
 The setup script copies the shared config into the project.
 
 Format PHP files:
-
-```bash
-composer fmt
-```
-
-Or invoke dPrint directly:
 
 ```bash
 dprint fmt

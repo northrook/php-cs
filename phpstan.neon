@@ -1,11 +1,11 @@
 parameters:
 	level: 9
 	paths:
-		- %currentWorkingDirectory%/src
-		- %currentWorkingDirectory%/tests
+		- src
+		- tests
 	excludePaths:
-		- %currentWorkingDirectory%/tests/Cases/**
-		- %currentWorkingDirectory%/var/*
+		- tests/Cases/**
+		- var/*
 	treatPhpDocTypesAsCertain: false
 rules:
 	- Northrook\Dev\PHPStan\ClassRequiresMemberRule
