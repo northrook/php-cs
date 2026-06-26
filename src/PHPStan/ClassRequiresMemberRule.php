@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Northrook\Dev\PHPStan;
 
@@ -37,20 +37,27 @@ final class ClassRequiresMemberRule implements Rule
      * @return array<array-key,RuleError>
      * @throws ShouldNotHappenException
      */
-    public function processNode(Node $node, Scope $scope): array
-    {
+    public function processNode(
+        Node $node,
+        Scope $scope,
+    ): array {
         if ($this->skipInvalidNode($node)) {
             return [];
         }
 
         foreach ($this->requiredMembers() as $member) {
             $member->reflect($this->reflection, $scope);
-            $memberName = $member->name($this->className);
+            $memberName = $member->name(
+                $this->className,
+            );
             $definition = $member->label . ' ' . $memberName;
             $requiredBy = $member->label . ' required by ' . $member->requiredBy . '.';
 
             if ($member->notDeclared()) {
-                $this->error(message: "Missing {$definition}.", identifier: 'requiresMember.notFound')->tip(
+                $this->error(
+                    message: "Missing {$definition}.",
+                    identifier: 'requiresMember.notFound',
+                )->tip(
                     $requiredBy,
                 );
 
