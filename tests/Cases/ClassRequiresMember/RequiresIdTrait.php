@@ -5,6 +5,6 @@ declare(strict_types = 1);
 namespace Tests\Cases\ClassRequiresMember;
 
 /**
- * @requires-property string $id
+ * @property string $id
  */
 trait RequiresIdTrait {}

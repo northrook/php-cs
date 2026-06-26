@@ -1,16 +1,18 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Northrook\Dev\PHPStan;
 
-use Northrook\Dev\PHPStan\Internal\{ErrorHandler, NodeResolver};
-use Northrook\Dev\PHPStan\RequiresMemberRule\RequiredMember;
+use Northrook\Dev\PHPStan\Internal\ErrorHandler;
+use Northrook\Dev\PHPStan\Internal\NodeResolver;
+use Northrook\Dev\PHPStan\RequiresMemberRule\RequiredMemberCollector;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Interface_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Rules\{Rule, RuleError};
+use PHPStan\Rules\Rule;
+use PHPStan\Rules\RuleError;
 use PHPStan\ShouldNotHappenException;
 
 /**
@@ -36,15 +38,9 @@ final class InterfaceRequiresMemberRule implements Rule
             return [];
         }
 
-        $docBlock = $node->getDocComment();
-
-        if ($docBlock === null || ! \str_contains($docBlock->getText(), '@requires-')) {
-            return [];
-        }
-
         $className       = $this->resolveName($node);
         $reflection      = $this->reflectionProvider->getClass($className);
-        $requiredMembers = $this->requiredMembers($docBlock->getText(), $className);
+        $requiredMembers = RequiredMemberCollector::collect($reflection);
 
         if ($requiredMembers === []) {
             return [];
@@ -64,28 +60,6 @@ final class InterfaceRequiresMemberRule implements Rule
         }
 
         return $this->errors();
-    }
-
-    /**
-     * @param class-string $className
-     *
-     * @return array<string, RequiredMember>
-     */
-    private function requiredMembers(string $docBlockString, string $className): array
-    {
-        $requiredMembers = [];
-
-        foreach ($this->explodeDocBlock($docBlockString) as $phpTagString) {
-            if (! \str_contains($phpTagString, '@requires-')) {
-                continue;
-            }
-
-            $requiresMember = RequiredMember::from($phpTagString, 'Interface', $className);
-
-            $requiredMembers[$requiresMember->key()] = $requiresMember;
-        }
-
-        return $requiredMembers;
     }
 
     public function getNodeType(): string

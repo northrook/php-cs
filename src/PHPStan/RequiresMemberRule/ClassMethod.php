@@ -1,9 +1,10 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Northrook\Dev\PHPStan\RequiresMemberRule;
 
+use PHPStan\PhpDoc\Tag\MethodTag;
 use PHPStan\ShouldNotHappenException;
 use ReflectionException;
 use ReflectionMethod;
@@ -11,15 +12,30 @@ use ReflectionMethod;
 final class ClassMethod extends RequiredMember
 {
     protected const array MODIFIERS = [
-        'final'     => true,
-        'static'    => true,
-        'abstract'  => true,
-        'public'    => true,
-        'protected' => true,
-        'private'   => true,
+        'final'    => true,
+        'static'   => true,
+        'abstract' => true,
     ];
 
     private null|ReflectionMethod $reflection = null;
+
+    /**
+     * @throws ShouldNotHappenException
+     */
+    public static function fromMethodTag(
+        string $name,
+        MethodTag $tag,
+        string $requiredByType,
+        string $requiredByClass,
+    ): self {
+        $member             = new self();
+        $member->name       = $name;
+        $member->modifiers  = $tag->isStatic() ? ['static' => 'static'] : [];
+        $member->typeOf     = $member->explodeTypes($tag->getReturnType()->describe(\PHPStan\Type\VerbosityLevel::typeOnly()));
+        $member->requiredBy = RequiredBy::from($requiredByType, $requiredByClass);
+
+        return $member;
+    }
 
     public function notDeclared(): bool
     {
@@ -38,32 +54,5 @@ final class ClassMethod extends RequiredMember
     protected function reflectionTypeOf(): array
     {
         return $this->explodeTypes($this->getReflection()->getReturnType());
-    }
-
-    protected function setTypeOf(string &$phpTagString): RequiredMember
-    {
-        $this->typeOf = [];
-
-        $typeOperator = \strrpos($phpTagString, ':');
-
-        if ($typeOperator === false) {
-            return $this;
-        }
-
-        $resolveTypes = \substr($phpTagString, $typeOperator + 1);
-        $phpTagString = \substr($phpTagString, 0, $typeOperator);
-
-        foreach ($this->explodeTypes($resolveTypes) as $resolveType) {
-            $this->typeOf[$resolveType] = $resolveType;
-        }
-
-        return $this;
-    }
-
-    protected function setMemberName(string $nameString): self
-    {
-        $this->name = \trim($nameString, '()');
-
-        return $this;
     }
 }

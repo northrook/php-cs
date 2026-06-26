@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Northrook\Dev\PHPStan;
 
 use Northrook\Dev\PHPStan\Internal\{ErrorHandler, NodeResolver};
-use Northrook\Dev\PHPStan\RequiresMemberRule\{RequiredMember};
+use Northrook\Dev\PHPStan\RequiresMemberRule\{RequiredMember, RequiredMemberCollector};
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Analyser\{Scope};
@@ -148,37 +148,9 @@ final class ClassRequiresMemberRule implements Rule
             ...$this->reflection->getInterfaces(),
             ...$this->reflection->getParents(),
             ...$this->reflection->getTraits(),
-        ] as $node) {
-            // Bail early if no doc block exists at all
-            if ($node->getResolvedPhpDoc() === null) {
-                continue;
-            }
-
-            $phpDocString = $node->getResolvedPhpDoc()->getPhpDocString();
-
-            // Only parse if the doc block has any rule tags
-            if (! $phpDocString || ! \str_contains($phpDocString, '@requires-')) {
-                continue;
-            }
-
-            // Normalize newline
-            if (\str_contains($phpDocString, "\r")) {
-                $phpDocString = \strtr($phpDocString, ["\r\n" => "\n", "\r" => "\n"]);
-            }
-
-            foreach (\explode("\n", $phpDocString) as $phpTagString) {
-                // Only consider lines with a `@requires` tag
-                if (! \str_contains($phpTagString, '@requires-')) {
-                    continue;
-                }
-
-                $requiresMember = RequiredMember::from(
-                    $phpTagString,
-                    $node->getClassTypeDescription(),
-                    $node->getName(),
-                );
-
-                $requiredMembers[$requiresMember->key()] = $requiresMember;
+        ] as $source) {
+            foreach (RequiredMemberCollector::collect($source) as $member) {
+                $requiredMembers[$member->key()] = $member;
             }
         }
 

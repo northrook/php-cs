@@ -5,6 +5,6 @@ declare(strict_types = 1);
 namespace Tests\Cases\ClassRequiresMember;
 
 /**
- * @requires-method run() : string
+ * @method string run()
  */
 interface RequiresMethod {}

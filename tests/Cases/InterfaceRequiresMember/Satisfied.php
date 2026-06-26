@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace Tests\Cases\InterfaceRequiresMember;
 
 /**
- * @requires-const BASIC_CONST
+ * @const BASIC_CONST
  */
 interface Satisfied
 {

@@ -1,10 +1,9 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Northrook\Dev\PHPStan\MemberRules;
 
-use PHPStan\Reflection\ClassReflection;
 use PHPStan\ShouldNotHappenException;
 use ReflectionClassConstant;
 use ReflectionMethod;
@@ -38,6 +37,21 @@ final readonly class AbstractMember
         return $this->definition === 'Constant' ? $className . '::' . $this->name : $className . '->' . $this->name;
     }
 
+    private static function requiresAbstract(string $phpDocComment): bool
+    {
+        if (\str_contains($phpDocComment, "\r")) {
+            $phpDocComment = \strtr($phpDocComment, ["\r\n" => "\n", "\r" => "\n"]);
+        }
+
+        foreach (\explode("\n", $phpDocComment) as $line) {
+            if (\trim($line, " \n\r\t\v\0*/") === '@abstract') {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * @param ReflectionClassConstant|ReflectionMethod|ReflectionProperty  $memberReflection
      * @param string                                                       $requiredBy
@@ -51,7 +65,7 @@ final readonly class AbstractMember
     ): null|AbstractMember {
         $phpDocComment = $memberReflection->getDocComment();
 
-        if (! $phpDocComment || ! \str_contains($phpDocComment, '@abstract')) {
+        if (! $phpDocComment || ! self::requiresAbstract($phpDocComment)) {
             return null;
         }
 

@@ -64,12 +64,23 @@ final class ClassRequiresMemberRuleTest extends PHPStanRuleTest
         ]);
     }
 
-    public function testReportsWrongMethodVisibility(): void
+    public function testReportsMissingStaticMethodOnConcreteClass(): void
     {
-        $this->expect(__DIR__ . '/../Cases/ClassRequiresMember/WrongMethodVisibility.php', [
-            ['Method Tests\Cases\ClassRequiresMember\WrongMethodVisibility->run protected modifiers.',  7],
-            ['Method Tests\Cases\ClassRequiresMember\WrongMethodVisibility->run missing protected',     7],
-            ['Method Tests\Cases\ClassRequiresMember\WrongMethodVisibility->run has public modifiers.', 7],
+        $this->expect(__DIR__ . '/../Cases/ClassRequiresMember/MissingRegister.php', [
+            [
+                'Missing Method Tests\Cases\ClassRequiresMember\MissingRegister->register.',
+                7,
+                'Method required by Interface Tests\Cases\ClassRequiresMember\RequiresRegister.',
+            ],
+        ]);
+    }
+
+    public function testReportsNonStaticMethodWhenStaticRequired(): void
+    {
+        $this->expect(__DIR__ . '/../Cases/ClassRequiresMember/WrongStaticMethod.php', [
+            ['Method Tests\Cases\ClassRequiresMember\WrongStaticMethod->register static modifiers.',  7],
+            ['Method Tests\Cases\ClassRequiresMember\WrongStaticMethod->register missing static',     7],
+            ['Method Tests\Cases\ClassRequiresMember\WrongStaticMethod->register has public modifiers.', 7],
         ]);
     }
 

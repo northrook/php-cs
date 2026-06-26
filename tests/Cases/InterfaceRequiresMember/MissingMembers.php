@@ -5,8 +5,8 @@ declare(strict_types = 1);
 namespace Tests\Cases\InterfaceRequiresMember;
 
 /**
- * @requires-const    BASIC_CONST
- * @requires-property string $name
- * @requires-method   greet()
+ * @const    BASIC_CONST
+ * @property string $name
+ * @method   void greet()
  */
 interface MissingMembers {}

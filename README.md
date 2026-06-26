@@ -5,7 +5,7 @@ Shared formatting and static analysis configuration.
 This package provides:
 
 - **[dPrint](https://dprint.dev/)** formatting via a shared `dprint.json`
-- **[PHPStan](https://phpstan.org/)** at level `9`, with custom rules for `@requires-*` and `@abstract` member contracts
+- **[PHPStan](https://phpstan.org/)** at level `9`, with custom rules for native PHPDoc member contracts (`@method`, `@property`, `@const`) and `@abstract`
 
 The conventions here prioritize ergonomics over PSR alignment.
 
@@ -68,25 +68,42 @@ dprint fmt
 
 ## Custom PHPStan rules
 
-### `@requires-*` tags
+### Native PHPDoc member contracts
 
-Declare members that implementing or extending types must provide.
+Declare members that implementing or extending types must provide, using standard PHPDoc tags.
 
 Checked on **concrete classes**, and on **interfaces themselves**.
 
-| Tag                  | Example                           |
-|----------------------|-----------------------------------|
-| `@requires-const`    | `@requires-const STATUS_CODE`     |
-| `@requires-property` | `@requires-property string $name` |
-| `@requires-method`   | `@requires-method run(): string`  |
+| Tag         | Example                                |
+|-------------|----------------------------------------|
+| `@const`    | `@const STATUS_CODE` or `@const string STATUS_CODE` |
+| `@property` | `@property string $name`               |
+| `@method`   | `@method string run()` or `@method static static register()` |
 
-Tags can specify modifiers and types.
+`@property-read` and `@property-write` are treated like `@property`.
 
-On concrete classes, mismatches are reported with stable identifiers (e.g.`requiresMember.method.TypeMissing`).
+Tags can specify modifiers (e.g. `static` on `@method`) and types.
+
+Visibility is not part of standard `@method` / `@property` syntax and is not validated.
+
+On concrete classes, mismatches are reported with stable identifiers (e.g. `requiresMember.method.TypeMissing`).
 
 Unexpected-but-compatible modifiers/types produce ignorable warnings.
 
-Requirements check the class's parents, interfaces, and traits.
+Requirements are collected from the class's parents, interfaces, and traits.
+
+```php
+/**
+ * @method static static register()
+ */
+abstract class ContractSingleton
+{
+    final protected static function getInstance(): static
+    {
+        return self::$instance ??= self::register();
+    }
+}
+```
 
 ### `@abstract` tag
 
@@ -115,7 +132,7 @@ A concrete class must declare its own versions of these members, inheritance alo
 
 The package ships `.phpstorm.meta.php`.
 
-PhpStorm recognizes `@requires-const`, `@requires-property`, `@requires-method`, and `@abstract` in docblocks.
+PhpStorm recognizes `@const` and `@abstract` in docblocks (in addition to the built-in `@method` and `@property` support).
 
 ## Validation
 
