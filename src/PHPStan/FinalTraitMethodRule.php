@@ -20,8 +20,12 @@ final class FinalTraitMethodRule implements Rule
     use ErrorHandler;
     use NodeResolver;
 
+    /**
+     * @param list<string>  $testDirectories  path segments that mark a file as test-only, where breaking a trait's seal is allowed
+     */
     public function __construct(
         private readonly ReflectionProvider $reflectionProvider,
+        private readonly array $testDirectories = ['tests'],
     ) {}
 
     /**
@@ -36,6 +40,10 @@ final class FinalTraitMethodRule implements Rule
         }
 
         if ($node->getTraitUses() === []) {
+            return [];
+        }
+
+        if ($this->isTestFile($scope->getFile())) {
             return [];
         }
 
@@ -86,6 +94,29 @@ final class FinalTraitMethodRule implements Rule
         }
 
         return $finalTraitMethods;
+    }
+
+    private function isTestFile(string $file): bool
+    {
+        if ($this->testDirectories === []) {
+            return false;
+        }
+
+        $file = \str_replace('\\', '/', $file);
+
+        foreach ($this->testDirectories as $directory) {
+            $directory = \trim($directory, '/');
+
+            if ($directory === '') {
+                continue;
+            }
+
+            if (\preg_match('#(^|/)' . \preg_quote($directory, '#') . '(/|$)#', $file) === 1) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function getNodeType(): string

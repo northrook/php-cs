@@ -36,17 +36,24 @@ composer update
 The script copies the shared `dprint.json`, generates a project `phpstan.neon`, and updates `composer.json`:
 
 - `require-dev` `phpstan/phpstan`
-- `require-dev` `phpstan/extension-installer`
-- `config.allow-plugins` `phpstan/extension-installer`
 - `scripts.phpstan` `vendor/bin/phpstan analyse`
 
 Pass `--force` to overwrite existing config files or refresh values that were already set.
 
 ### PHPStan
 
-The custom rules and the enforced **level `9`** live in the package's canonical `extension.neon`. They are applied automatically via [`phpstan/extension-installer`](https://github.com/phpstan/extension-installer), which also auto-registers any other PHPStan extensions you install.
+The custom rules and the enforced **level `9`** live in the package's canonical `extension.neon`.
 
-The setup script generates a thin project `phpstan.neon` that only declares the analysed `paths`:
+The setup script generates a thin project `phpstan.neon` that includes that `extension.neon` and declares the analysed `paths`:
+
+```neon
+includes:
+	- vendor/northrook/php-cs/extension.neon
+parameters:
+	paths:
+		- src
+		- tests
+```
 
 - the source directory (`src`, falling back to `php`)
 - `tests`, when present

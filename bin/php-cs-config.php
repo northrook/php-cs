@@ -75,35 +75,11 @@ if (! \is_file($packageComposerPath)) {
 /** @var array<string, mixed> $packageComposer */
 $packageComposer = \json_decode((string) \file_get_contents($packageComposerPath), true, 512, JSON_THROW_ON_ERROR);
 
-$phpstanVersion            = $packageComposer['require']['phpstan/phpstan'] ?? null;
-$extensionInstallerVersion = $packageComposer['require-dev']['phpstan/extension-installer'] ?? null;
-$extensionInstallerAllowed = $packageComposer['config']['allow-plugins']['phpstan/extension-installer'] ?? null;
-$phpstanScript             = $packageComposer['scripts']['phpstan'] ?? null;
+$phpstanVersion = $packageComposer['require']['phpstan/phpstan'] ?? null;
+$phpstanScript  = $packageComposer['scripts']['phpstan'] ?? null;
 
 if (! \is_string($phpstanVersion)) {
     \fwrite(STDERR, format('Package composer.json is missing <teal>require.phpstan/phpstan</teal>.', STDERR) . "\n");
-
-    exit(1);
-}
-
-if (! \is_string($extensionInstallerVersion)) {
-    \fwrite(
-        STDERR,
-        format('Package composer.json is missing <teal>require-dev.phpstan/extension-installer</teal>.', STDERR) . "\n",
-    );
-
-    exit(1);
-}
-
-if ($extensionInstallerAllowed !== true) {
-    \fwrite(
-        STDERR,
-        format(
-            'Package composer.json is missing <teal>config.allow-plugins.phpstan/extension-installer</teal>.',
-            STDERR,
-        )
-            . "\n",
-    );
 
     exit(1);
 }
@@ -165,44 +141,6 @@ if (! isset($consumerComposer['require-dev']) || ! \is_array($consumerComposer['
 }
 
 $mergeString($consumerComposer['require-dev'], 'phpstan/phpstan', $phpstanVersion, 'require-dev.phpstan/phpstan');
-$mergeString(
-    $consumerComposer['require-dev'],
-    'phpstan/extension-installer',
-    $extensionInstallerVersion,
-    'require-dev.phpstan/extension-installer',
-);
-
-if (! isset($consumerComposer['config']) || ! \is_array($consumerComposer['config'])) {
-    $consumerComposer['config'] = [];
-}
-
-if (
-    ! isset($consumerComposer['config']['allow-plugins']) || ! \is_array($consumerComposer['config']['allow-plugins'])
-) {
-    $consumerComposer['config']['allow-plugins'] = [];
-}
-
-$currentAllowed = $consumerComposer['config']['allow-plugins']['phpstan/extension-installer'] ?? null;
-
-if ($currentAllowed === null) {
-    $consumerComposer['config']['allow-plugins']['phpstan/extension-installer'] = $extensionInstallerAllowed;
-    $composerChanged                                                            = true;
-} elseif ($currentAllowed !== $extensionInstallerAllowed) {
-    if ($force) {
-        $consumerComposer['config']['allow-plugins']['phpstan/extension-installer'] = $extensionInstallerAllowed;
-        $composerChanged                                                            = true;
-    } else {
-        \fwrite(
-            STDERR,
-            format(
-                '<teal>composer.json</teal> already sets <blue>config.allow-plugins.phpstan/extension-installer</blue>.'
-                . ' Pass <yellow bold>--force</yellow> to update it.',
-                STDERR,
-            )
-                . "\n",
-        );
-    }
-}
 
 if (! isset($consumerComposer['scripts']) || ! \is_array($consumerComposer['scripts'])) {
     $consumerComposer['scripts'] = [];
@@ -299,7 +237,12 @@ $generatePhpstanConfig = static function() use ($projectRoot, $force): void {
         $paths[] = 'tests';
     }
 
-    $lines = ['parameters:', "\tpaths:"];
+    $lines = [
+        'includes:',
+        "\t- vendor/northrook/php-cs/extension.neon",
+        'parameters:',
+        "\tpaths:",
+    ];
 
     foreach ($paths as $path) {
         $lines[] = "\t\t- {$path}";
@@ -314,7 +257,7 @@ $generatePhpstanConfig = static function() use ($projectRoot, $force): void {
     }
 
     echo format("Generated <teal>phpstan.neon</teal> at {$target}\n");
-    echo format("Rules and level come from <blue>php-cs</blue> via <teal>phpstan/extension-installer</teal>.\n");
+    echo format("Rules and level come from <blue>php-cs</blue> via the included <teal>extension.neon</teal>.\n");
 };
 
 $generatePhpstanConfig();

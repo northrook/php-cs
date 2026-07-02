@@ -13,6 +13,9 @@ use Tests\PHPStanRuleTest;
  */
 final class FinalTraitMethodRuleTest extends PHPStanRuleTest
 {
+    /** @var list<string> */
+    private array $testDirectories = [];
+
     public function testReportsClassOverridingFinalTraitMethod(): void
     {
         $this->expect(__DIR__ . '/../Cases/FinalTraitMethod/OverridesFinal.php', [
@@ -40,8 +43,15 @@ final class FinalTraitMethodRuleTest extends PHPStanRuleTest
         $this->expect(__DIR__ . '/../Cases/FinalTraitMethod/Satisfied.php', []);
     }
 
+    public function testIgnoresOverridesInTestDirectories(): void
+    {
+        $this->testDirectories = ['tests'];
+
+        $this->expect(__DIR__ . '/../Cases/FinalTraitMethod/OverridesFinal.php', []);
+    }
+
     protected function getRule(): Rule
     {
-        return new FinalTraitMethodRule($this->createReflectionProvider());
+        return new FinalTraitMethodRule($this->createReflectionProvider(), $this->testDirectories);
     }
 }
