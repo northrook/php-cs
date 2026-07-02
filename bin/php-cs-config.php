@@ -269,9 +269,57 @@ $copyConfigFile = static function(
 };
 
 $copyConfigFile('dprint.json');
-$copyConfigFile('phpstan.neon');
 
 //endregion Copy config files
+
+//region Generate phpstan.neon
+
+$generatePhpstanConfig = static function() use ($projectRoot, $force): void {
+    $target = $projectRoot . '/phpstan.neon';
+
+    if (\is_file($target) && ! $force) {
+        \fwrite(
+            STDERR,
+            format("<teal>phpstan.neon</teal> already exists. Pass <yellow bold>--force</yellow> to overwrite.", STDERR)
+                . "\n",
+        );
+
+        return;
+    }
+
+    $sourceDir = match (true) {
+        \is_dir($projectRoot . '/src') => 'src',
+        \is_dir($projectRoot . '/php') => 'php',
+        default => 'src',
+    };
+
+    $paths = [$sourceDir];
+
+    if (\is_dir($projectRoot . '/tests')) {
+        $paths[] = 'tests';
+    }
+
+    $lines = ['parameters:', "\tpaths:"];
+
+    foreach ($paths as $path) {
+        $lines[] = "\t\t- {$path}";
+    }
+
+    $neon = \implode("\n", $lines) . "\n";
+
+    if (\file_put_contents($target, $neon) === false) {
+        \fwrite(STDERR, format("Failed to write <teal>phpstan.neon</teal> to {$target}.", STDERR) . "\n");
+
+        exit(1);
+    }
+
+    echo format("Generated <teal>phpstan.neon</teal> at {$target}\n");
+    echo format("Rules and level come from <blue>php-cs</blue> via <teal>phpstan/extension-installer</teal>.\n");
+};
+
+$generatePhpstanConfig();
+
+//endregion Generate phpstan.neon
 
 //region Summary
 

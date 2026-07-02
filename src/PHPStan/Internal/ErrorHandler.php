@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Northrook\Dev\PHPStan\Internal;
+namespace Northrook\PHPStan\Internal;
 
 use PHPStan\Rules\{RuleError, RuleErrorBuilder};
 use PHPStan\ShouldNotHappenException;

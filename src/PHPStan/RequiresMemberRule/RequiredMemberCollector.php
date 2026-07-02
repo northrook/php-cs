@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Northrook\Dev\PHPStan\RequiresMemberRule;
+namespace Northrook\PHPStan\RequiresMemberRule;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;

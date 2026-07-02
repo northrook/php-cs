@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Northrook\Dev\PHPStan\MemberRules;
+namespace Northrook\PHPStan\MemberRules;
 
 use PHPStan\ShouldNotHappenException;
 use ReflectionClassConstant;

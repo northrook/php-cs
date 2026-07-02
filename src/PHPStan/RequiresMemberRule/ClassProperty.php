@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Northrook\Dev\PHPStan\RequiresMemberRule;
+namespace Northrook\PHPStan\RequiresMemberRule;
 
 use PHPStan\PhpDoc\Tag\PropertyTag;
 use PHPStan\ShouldNotHappenException;

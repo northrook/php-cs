@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Northrook\Dev\PHPStan;
+namespace Northrook\PHPStan;
 
-use Northrook\Dev\PHPStan\Internal\ErrorHandler;
-use Northrook\Dev\PHPStan\Internal\NodeResolver;
-use Northrook\Dev\PHPStan\RequiresMemberRule\RequiredMemberCollector;
+use Northrook\PHPStan\Internal\ErrorHandler;
+use Northrook\PHPStan\Internal\NodeResolver;
+use Northrook\PHPStan\RequiresMemberRule\RequiredMemberCollector;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Interface_;
 use PHPStan\Analyser\Scope;

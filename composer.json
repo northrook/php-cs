@@ -2,7 +2,6 @@
   "name": "northrook/php-cs",
   "type": "phpstan-extension",
   "description": "Custom PHP Coding Standards for Northrook projects.",
-  "version": "0.5.0",
   "license": "BSD-3-Clause",
   "keywords": [
     "dev"
@@ -15,7 +14,14 @@
   ],
   "autoload": {
     "psr-4": {
-      "Northrook\\Dev\\": "src"
+      "Northrook\\": "src"
+    }
+  },
+  "extra": {
+    "phpstan": {
+      "includes": [
+        "extension.neon"
+      ]
     }
   },
   "autoload-dev": {
@@ -26,7 +32,8 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "bin": [
-    "bin/php-cs-config.php"
+    "bin/php-cs-config.php",
+    "bin/collision-check.php"
   ],
   "require": {
     "php": ">=8.4",
@@ -38,12 +45,14 @@
   },
   "scripts": {
     "php-cs-config": "php-cs-config.php",
+    "collision": "collision-check.php",
     "phpstan": "vendor/bin/phpstan analyse",
     "test": "vendor/bin/phpunit",
     "fmt": "dprint fmt",
     "check": [
       "@phpstan",
-      "@test"
+      "@test",
+      "@collision"
     ]
   },
   "config": {

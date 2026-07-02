@@ -33,7 +33,7 @@ vendor/bin/php-cs-config.php
 composer update
 ```
 
-The script copies shared `dprint.json` and `phpstan.neon` into the project root, and updates `composer.json`:
+The script copies the shared `dprint.json`, generates a project `phpstan.neon`, and updates `composer.json`:
 
 - `require-dev` `phpstan/phpstan`
 - `require-dev` `phpstan/extension-installer`
@@ -44,9 +44,14 @@ Pass `--force` to overwrite existing config files or refresh values that were al
 
 ### PHPStan
 
-The setup script copies `phpstan.neon` to the project root. Edit it there for project-specific overrides.
+The custom rules and the enforced **level `9`** live in the package's canonical `extension.neon`. They are applied automatically via [`phpstan/extension-installer`](https://github.com/phpstan/extension-installer), which also auto-registers any other PHPStan extensions you install.
 
-The shipped config enforces **level `9`**, and analyses `./src` and `./tests`.
+The setup script generates a thin project `phpstan.neon` that only declares the analysed `paths`:
+
+- the source directory (`src`, falling back to `php`)
+- `tests`, when present
+
+Add any project-specific overrides (paths, `excludePaths`, `ignoreErrors`, a different `level`) to that generated `phpstan.neon`.
 
 Run PHPStan from the project root:
 
@@ -127,6 +132,35 @@ abstract class Base
 ```
 
 A concrete class must declare its own versions of these members, inheritance alone is not enough.
+
+### Sealed trait methods
+
+Errors when a class, trait, or enum body redeclares a `final` method inherited from a directly-used trait.
+
+PHP silently lets the using type override a trait's `final` method, defeating the intended seal (PHP only fatals when a *subclass* overrides an inherited final trait method).
+
+```php
+trait Sealed
+{
+    final public function run(): string
+    {
+        return 'sealed';
+    }
+}
+
+final class Broken
+{
+    use Sealed;
+
+    // finalTraitMethod.overridden
+    public function run(): string
+    {
+        return 'overridden';
+    }
+}
+```
+
+Reported with the `finalTraitMethod.overridden` identifier.
 
 ## PhpStorm
 

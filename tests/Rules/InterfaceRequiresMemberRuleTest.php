@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Tests\Rules;
 
-use Northrook\Dev\PHPStan\InterfaceRequiresMemberRule;
+use Northrook\PHPStan\InterfaceRequiresMemberRule;
 use PHPStan\Rules\Rule;
 use Tests\PHPStanRuleTest;
 

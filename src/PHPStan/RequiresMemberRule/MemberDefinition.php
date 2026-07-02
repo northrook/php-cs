@@ -2,14 +2,14 @@
 
 declare(strict_types = 1);
 
-namespace Northrook\Dev\PHPStan\RequiresMemberRule;
+namespace Northrook\PHPStan\RequiresMemberRule;
 
 use PHPStan\ShouldNotHappenException;
 use Stringable;
 
 /**
  * @internal
- * @used-by \Northrook\Dev\PHPStan\RequiresMemberRule\RequiredMember
+ * @used-by \Northrook\PHPStan\RequiresMemberRule\RequiredMember
  */
 final readonly class MemberDefinition
 {
