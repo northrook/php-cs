@@ -1,6 +1,6 @@
 {
   "name": "northrook/php-cs",
-  "type": "phpstan-extension",
+  "type": "library",
   "description": "Custom PHP Coding Standards for Northrook projects.",
   "license": "BSD-3-Clause",
   "keywords": [
@@ -15,13 +15,6 @@
   "autoload": {
     "psr-4": {
       "Northrook\\": "src"
-    }
-  },
-  "extra": {
-    "phpstan": {
-      "includes": [
-        "extension.neon"
-      ]
     }
   },
   "autoload-dev": {
@@ -40,7 +33,6 @@
     "phpstan/phpstan": "^2.2"
   },
   "require-dev": {
-    "phpstan/extension-installer": "^1.4",
     "phpunit/phpunit": "^13.2"
   },
   "scripts": {
@@ -54,10 +46,5 @@
       "@test",
       "@collision"
     ]
-  },
-  "config": {
-    "allow-plugins": {
-      "phpstan/extension-installer": true
-    }
   }
 }
