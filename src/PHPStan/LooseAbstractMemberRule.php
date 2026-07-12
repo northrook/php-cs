@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Northrook\PHPStan;
 
@@ -39,7 +39,7 @@ final class LooseAbstractMemberRule implements Rule
      */
     public function processNode(Node $node, Scope $scope): array
     {
-        if (! $node instanceof Class_) {
+        if (! $node instanceof Class_ || $node->isAnonymous()) {
             return [];
         }
 

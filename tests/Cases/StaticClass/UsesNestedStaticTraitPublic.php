@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Cases\StaticClass;
 
-class UsesStaticTraitPublic
+class UsesNestedStaticTraitPublic
 {
-    use StaticTrait;
+    use UsesNestedStaticTrait;
 
     public function __construct() {}
 }

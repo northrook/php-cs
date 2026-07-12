@@ -39,9 +39,7 @@ final class ClassConstant extends RequiredMember
 
         if ($segments === []) {
             throw new ShouldNotHappenException(
-                message: '@const tag value `'
-                . $value
-                . '` could not be parsed.',
+                message: '@const tag value `' . $value . '` could not be parsed.',
             );
         }
 
@@ -49,9 +47,7 @@ final class ClassConstant extends RequiredMember
 
         if ($name === null || $name === '') {
             throw new ShouldNotHappenException(
-                message: '@const tag value `'
-                . $value
-                . '` has no constant name.',
+                message: '@const tag value `' . $value . '` has no constant name.',
             );
         }
 

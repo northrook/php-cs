@@ -1,10 +1,26 @@
 parameters:
 	level: 9
 	treatPhpDocTypesAsCertain: false
+	finalTraitMethod:
+		testDirectories:
+			- tests
+
+parametersSchema:
+	finalTraitMethod: structure([
+		testDirectories: listOf(string())
+	])
+
 rules:
 	- Northrook\PHPStan\ClassRequiresMemberRule
 	- Northrook\PHPStan\InterfaceRequiresMemberRule
 	- Northrook\PHPStan\LooseAbstractMemberRule
-	- Northrook\PHPStan\FinalTraitMethodRule
 	- Northrook\PHPStan\StaticClassRule
 	- Northrook\PHPStan\SingletonClassRule
+
+services:
+	-
+		class: Northrook\PHPStan\FinalTraitMethodRule
+		arguments:
+			testDirectories: %finalTraitMethod.testDirectories%
+		tags:
+			- phpstan.rules.rule

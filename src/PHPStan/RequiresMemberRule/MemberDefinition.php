@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Northrook\PHPStan\RequiresMemberRule;
 
@@ -121,7 +121,7 @@ final readonly class MemberDefinition
                 ),
             };
 
-            $value = \str_replace(['?', '[]'], ['null', 'array'], \strtolower($value));
+            $value = \strtolower($value);
 
             $prepared[$value] ??= $value;
         }

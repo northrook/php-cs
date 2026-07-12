@@ -7,4 +7,4 @@ namespace Tests\Cases\ClassRequiresMember;
 /**
  * @property string $id
  */
-trait RequiresIdTrait {}
+trait NestedRequiresIdTrait {}

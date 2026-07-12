@@ -53,7 +53,10 @@ final class InterfaceRequiresMemberRule implements Rule
             $requiredBy = $member->label . ' required by ' . $member->requiredBy . '.';
 
             if ($member->notDeclared()) {
-                $this->error(message: "Missing {$definition}.", identifier: 'requiresMember.notFound')->tip(
+                $this->error(
+                    message: "Missing {$definition}.",
+                    identifier: 'requiresMember.notFound',
+                )->tip(
                     $requiredBy,
                 );
             }

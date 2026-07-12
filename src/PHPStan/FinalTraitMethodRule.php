@@ -1,12 +1,12 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Northrook\PHPStan;
 
 use Northrook\PHPStan\Internal\{ErrorHandler, NodeResolver};
 use PhpParser\Node;
-use PhpParser\Node\Stmt\{ClassLike, Class_, Enum_, Trait_};
+use PhpParser\Node\Stmt\{Class_, ClassLike, Enum_, Trait_};
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\{Rule, RuleError};
@@ -39,7 +39,11 @@ final class FinalTraitMethodRule implements Rule
             return [];
         }
 
-        if ($node->getTraitUses() === []) {
+        if ($node instanceof Class_ && $node->isAnonymous()) {
+            return [];
+        }
+
+        if ($node->getMethods() === []) {
             return [];
         }
 
@@ -65,10 +69,11 @@ final class FinalTraitMethodRule implements Rule
 
             $method = $className . '::' . $classMethod->name->toString() . '()';
 
-            $this->error(
-                message: "Method {$method} overrides final method sealed by trait {$sealedBy}.",
-                identifier: 'finalTraitMethod.overridden',
-            )
+            $this
+                ->error(
+                    message: "Method {$method} overrides final method sealed by trait {$sealedBy}.",
+                    identifier: 'finalTraitMethod.overridden',
+                )
                 ->line($classMethod->getStartLine())
                 ->tip('PHP does not enforce a trait\'s `final` on the using class, silently breaking the seal.');
         }
@@ -83,13 +88,15 @@ final class FinalTraitMethodRule implements Rule
     {
         $finalTraitMethods = [];
 
-        foreach ($reflection->getTraits() as $trait) {
-            foreach ($trait->getNativeReflection()->getMethods() as $method) {
-                if (! $method->isFinal()) {
-                    continue;
-                }
+        foreach ([$reflection, ...$reflection->getParents()] as $type) {
+            foreach ($type->getTraits(true) as $trait) {
+                foreach ($trait->getNativeReflection()->getMethods() as $method) {
+                    if (! $method->isFinal() || $method->getDeclaringClass()->getName() !== $trait->getName()) {
+                        continue;
+                    }
 
-                $finalTraitMethods[\strtolower($method->getName())] = $method->getDeclaringClass()->getName();
+                    $finalTraitMethods[\strtolower($method->getName())] ??= $method->getDeclaringClass()->getName();
+                }
             }
         }
 

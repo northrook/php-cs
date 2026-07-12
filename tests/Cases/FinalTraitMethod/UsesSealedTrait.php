@@ -4,12 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Cases\FinalTraitMethod;
 
-final class Satisfied
+class UsesSealedTrait
 {
     use SealedTrait;
-
-    public function other(): string
-    {
-        return 'ok';
-    }
 }

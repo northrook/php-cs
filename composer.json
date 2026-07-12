@@ -28,8 +28,8 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "bin": [
-    "bin/php-cs-config.php",
-    "bin/collision-check.php"
+    "bin/php-cs-config",
+    "bin/collision-check"
   ],
   "require": {
     "php": ">=8.4",
@@ -39,8 +39,8 @@
     "phpunit/phpunit": "^13.2"
   },
   "scripts": {
-    "php-cs-config": "vendor/bin/php-cs-config.php",
-    "collision": "vendor/bin/collision-check.php",
+    "php-cs-config": "vendor/bin/php-cs-config",
+    "collision": "vendor/bin/collision-check",
     "phpstan": "vendor/bin/phpstan analyse",
     "test": "vendor/bin/phpunit",
     "fmt": "dprint fmt",

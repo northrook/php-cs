@@ -28,10 +28,12 @@ final class ClassMethod extends RequiredMember
         string $requiredByType,
         string $requiredByClass,
     ): self {
-        $member             = new self();
-        $member->name       = $name;
-        $member->modifiers  = $tag->isStatic() ? ['static' => 'static'] : [];
-        $member->typeOf     = $member->explodeTypes($tag->getReturnType()->describe(\PHPStan\Type\VerbosityLevel::typeOnly()));
+        $member            = new self();
+        $member->name      = $name;
+        $member->modifiers = $tag->isStatic() ? ['static' => 'static'] : [];
+        $member->typeOf    = $member->explodeTypes(
+            $tag->getReturnType()->describe(\PHPStan\Type\VerbosityLevel::typeOnly()),
+        );
         $member->requiredBy = RequiredBy::from($requiredByType, $requiredByClass);
 
         return $member;

@@ -5,6 +5,6 @@ declare(strict_types=1);
 namespace Tests\Cases\ClassRequiresMember;
 
 /**
- * @property string $id
+ * @const ?string NULLABLE_CONST
  */
-trait RequiresIdTrait {}
+interface Requires_Nullable_Const {}

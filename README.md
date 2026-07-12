@@ -5,7 +5,7 @@ Shared formatting and static analysis configuration.
 This package provides:
 
 - **[dPrint](https://dprint.dev/)** formatting via a shared `dprint.json`
-- **[PHPStan](https://phpstan.org/)** at level `9`, with custom rules for native PHPDoc member contracts (`@method`, `@property`, `@const`), `@abstract`, `@static`, and `@singleton`
+- **[PHPStan](https://phpstan.org/)** at level `9`, with custom rules for native PHPDoc member contracts (`@method`, `@property`, `@const`), `@abstract`, `@static`, `@singleton`, and sealed trait methods
 
 The conventions here prioritize ergonomics over PSR alignment.
 
@@ -29,7 +29,7 @@ Add the package, then run the setup script from your project root:
 
 ```bash
 composer require --dev northrook/php-cs
-vendor/bin/php-cs-config.php
+vendor/bin/php-cs-config
 composer update
 ```
 
@@ -37,8 +37,8 @@ The script copies the shared `dprint.json`, generates a project `phpstan.neon`, 
 
 - `require-dev` `phpstan/phpstan`
 - `scripts.phpstan` `vendor/bin/phpstan analyse`
-- `scripts.php-cs-config` `vendor/bin/php-cs-config.php`
-- `scripts.collision` `vendor/bin/collision-check.php`
+- `scripts.php-cs-config` `vendor/bin/php-cs-config`
+- `scripts.collision` `vendor/bin/collision-check`
 
 After setup, these run as Composer scripts from the project root:
 
@@ -104,7 +104,7 @@ Checked on **concrete classes**, and on **interfaces themselves**.
 
 `@property-read` and `@property-write` are treated like `@property`.
 
-Tags can specify modifiers (e.g. `static` on `@method`) and types.
+`@method` can require `static`. Types are checked for `@method`, `@property`, and `@const`.
 
 Visibility is not part of standard `@method` / `@property` syntax and is not validated.
 
@@ -112,7 +112,7 @@ On concrete classes, mismatches are reported with stable identifiers (e.g. `requ
 
 Unexpected-but-compatible modifiers/types produce ignorable warnings.
 
-Requirements are collected from the class's parents, interfaces, and traits.
+Requirements are collected from the class itself, its parents, interfaces, and traits — including nested traits and traits used by parents.
 
 ```php
 /**
@@ -129,7 +129,7 @@ abstract class ContractSingleton
 
 ### `@abstract` tag
 
-Mark members on abstract classes or traits that every concrete descendant must redeclare.
+Mark members on abstract classes or traits that every descendant must redeclare — including intermediate abstract classes.
 
 ```php
 abstract class Base
@@ -148,7 +148,7 @@ abstract class Base
 }
 ```
 
-A concrete class must declare its own versions of these members, inheritance alone is not enough.
+Each class in the hierarchy must declare its own versions of these members; inheritance alone is not enough.
 
 ### `@static` tag
 
@@ -166,7 +166,7 @@ class Hash
 }
 ```
 
-Subclasses must follow the same constructor rule. A `@static` trait imposes the rule on every class that uses it.
+Subclasses must follow the same constructor rule. A `@static` trait imposes the rule on every class that uses it — including via nested traits or parents that use the trait.
 
 Reported with the `staticClass.publicConstructor` identifier.
 
@@ -188,7 +188,7 @@ Reported with the `singleton.missingInterface` identifier.
 
 ### Sealed trait methods
 
-Errors when a class, trait, or enum body redeclares a `final` method inherited from a directly-used trait.
+Errors when a class, trait, or enum body redeclares a `final` method sealed by a trait — including traits used by parents and nested traits.
 
 PHP silently lets the using type override a trait's `final` method, defeating the intended seal (PHP only fatals when a *subclass* overrides an inherited final trait method).
 
@@ -215,6 +215,18 @@ final class Broken
 
 Reported with the `finalTraitMethod.overridden` identifier.
 
+Overrides in test directories are allowed by default. Configure path segments via `finalTraitMethod.testDirectories` (defaults to `tests`):
+
+```neon
+parameters:
+	finalTraitMethod:
+		testDirectories:
+			- tests
+			- fixtures
+```
+
+Set `testDirectories` to an empty list to enforce the seal everywhere.
+
 ## PhpStorm
 
 The package ships `.phpstorm.meta.php`.
@@ -226,9 +238,10 @@ PhpStorm recognizes `@const`, `@abstract`, `@static`, and `@singleton` in docblo
 In this repository:
 
 ```bash
-composer check   # phpstan + phpunit
+composer check   # phpstan + phpunit + collision
 composer phpstan
 composer test
+composer collision
 ```
 
 ## License

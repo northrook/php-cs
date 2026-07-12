@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Tests\Rules;
 
@@ -78,8 +78,8 @@ final class ClassRequiresMemberRuleTest extends PHPStanRuleTest
     public function testReportsNonStaticMethodWhenStaticRequired(): void
     {
         $this->expect(__DIR__ . '/../Cases/ClassRequiresMember/WrongStaticMethod.php', [
-            ['Method Tests\Cases\ClassRequiresMember\WrongStaticMethod->register static modifiers.',  7],
-            ['Method Tests\Cases\ClassRequiresMember\WrongStaticMethod->register missing static',     7],
+            ['Method Tests\Cases\ClassRequiresMember\WrongStaticMethod->register static modifiers.',     7],
+            ['Method Tests\Cases\ClassRequiresMember\WrongStaticMethod->register missing static',        7],
             ['Method Tests\Cases\ClassRequiresMember\WrongStaticMethod->register has public modifiers.', 7],
         ]);
     }
@@ -106,9 +106,36 @@ final class ClassRequiresMemberRuleTest extends PHPStanRuleTest
         ]);
     }
 
+    public function testReportsMissingPropertyFromNestedTrait(): void
+    {
+        $this->expect(__DIR__ . '/../Cases/ClassRequiresMember/MissingNestedTraitProperty.php', [
+            [
+                'Missing Property Tests\Cases\ClassRequiresMember\MissingNestedTraitProperty->id.',
+                7,
+                'Property required by Trait Tests\Cases\ClassRequiresMember\NestedRequiresIdTrait.',
+            ],
+        ]);
+    }
+
     public function testPassesWhenConcreteClassSatisfiesContracts(): void
     {
         $this->expect(__DIR__ . '/../Cases/ClassRequiresMember/Satisfied.php', []);
+    }
+
+    public function testPassesNullableConstFromUnderscoredInterface(): void
+    {
+        $this->expect(__DIR__ . '/../Cases/ClassRequiresMember/SatisfiedNullableConst.php', []);
+    }
+
+    public function testReportsMissingNullableConstFromUnderscoredInterface(): void
+    {
+        $this->expect(__DIR__ . '/../Cases/ClassRequiresMember/MissingNullableConst.php', [
+            [
+                'Missing Constant Tests\Cases\ClassRequiresMember\MissingNullableConst::NULLABLE_CONST.',
+                7,
+                'Constant required by Interface Tests\Cases\ClassRequiresMember\Requires_Nullable_Const.',
+            ],
+        ]);
     }
 
     protected function getRule(): Rule

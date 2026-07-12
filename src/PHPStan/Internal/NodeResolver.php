@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Northrook\PHPStan\Internal;
 
@@ -13,21 +13,6 @@ use PHPStan\ShouldNotHappenException;
  */
 trait NodeResolver
 {
-    /**
-     * @param string $string
-     *
-     * @return string[]
-     */
-    final protected function explodeDocBlock(string $string): array
-    {
-        // Normalize newline
-        if (\str_contains($string, "\r")) {
-            $string = \strtr($string, ["\r\n" => "\n", "\r" => "\n"]);
-        }
-
-        return \explode("\n", $string);
-    }
-
     /**
      * @param Node $from
      *

@@ -65,9 +65,12 @@ final class ClassRequiresMemberRule implements Rule
             }
 
             if ($modifiers = $member->missingModifiers()) {
+                $ignorable = $modifiers->missing === [] && $modifiers->unexpected !== [];
+
                 $this->error(
                     message: "{$definition} {$modifiers->required()} modifiers.",
                     identifier: "requiresMember.{$member->type}.Modifiers",
+                    ignorable: $ignorable,
                 );
 
                 if ($modifiers->missing) {
@@ -89,19 +92,24 @@ final class ClassRequiresMemberRule implements Rule
                     $this->error(
                         message: "{$definition} has no declared modifiers.",
                         identifier: "requiresMember.{$member->type}.Modifiers",
+                        ignorable: $ignorable,
                     );
                 } else {
                     $this->error(
                         message: "{$definition} has {$modifiers->declared()} modifiers.",
                         identifier: "requiresMember.{$member->type}.Modifiers",
+                        ignorable: $ignorable,
                     );
                 }
             }
 
             if ($typeOf = $member->missingTypeDeclarations()) {
+                $ignorable = $typeOf->missing === [] && $typeOf->unexpected !== [];
+
                 $this->error(
                     message: "{$definition} requires types {$typeOf->required()}",
                     identifier: "requiresMember.{$member->type}.RequiresType",
+                    ignorable: $ignorable,
                 );
 
                 if ($typeOf->missing) {
@@ -118,15 +126,18 @@ final class ClassRequiresMemberRule implements Rule
                         ignorable: true,
                     );
                 }
+
                 if ($typeOf->declared === []) {
                     $this->error(
                         message: "{$definition} has no declared types.",
                         identifier: "requiresMember.{$member->type}.UndeclaredType",
+                        ignorable: $ignorable,
                     );
                 } else {
                     $this->error(
                         message: "{$definition} has {$typeOf->declared()} types.",
                         identifier: "requiresMember.{$member->type}.DeclaredType",
+                        ignorable: $ignorable,
                     );
                 }
             }
@@ -147,7 +158,7 @@ final class ClassRequiresMemberRule implements Rule
             $this->reflection,
             ...$this->reflection->getInterfaces(),
             ...$this->reflection->getParents(),
-            ...$this->reflection->getTraits(),
+            ...$this->reflection->getTraits(true),
         ] as $source) {
             foreach (RequiredMemberCollector::collect($source) as $member) {
                 $requiredMembers[$member->key()] = $member;
@@ -165,11 +176,7 @@ final class ClassRequiresMemberRule implements Rule
      */
     private function skipInvalidNode(Node $node): bool
     {
-        if (! $node instanceof Class_) {
-            return true;
-        }
-
-        if ($node->isAbstract()) {
+        if (! $node instanceof Class_ || $node->isAnonymous() || $node->isAbstract()) {
             return true;
         }
 

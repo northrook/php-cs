@@ -27,11 +27,11 @@ final class ClassProperty extends RequiredMember
         string $requiredByType,
         string $requiredByClass,
     ): self {
-        $member             = new self();
-        $member->name       = $name;
-        $member->modifiers  = [];
-        $type = $tag->getReadableType() ?? $tag->getWritableType();
-        $member->typeOf     = $member->explodeTypes(
+        $member            = new self();
+        $member->name      = $name;
+        $member->modifiers = [];
+        $type              = $tag->getReadableType() ?? $tag->getWritableType();
+        $member->typeOf    = $member->explodeTypes(
             $type?->describe(\PHPStan\Type\VerbosityLevel::typeOnly()),
         );
         $member->requiredBy = RequiredBy::from($requiredByType, $requiredByClass);

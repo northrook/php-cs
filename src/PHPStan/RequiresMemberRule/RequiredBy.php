@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Northrook\PHPStan\RequiresMemberRule;
 
@@ -48,7 +48,12 @@ final readonly class RequiredBy implements Stringable
             );
         }
 
-        if (\ctype_alnum(\strtr($className, ['\\' => ''])) === false) {
+        if (
+            \preg_match(
+                '/^[A-Za-z_\x80-\xff][A-Za-z0-9_\x80-\xff]*(?:\\\\[A-Za-z_\x80-\xff][A-Za-z0-9_\x80-\xff]*)*$/',
+                $className,
+            ) !== 1
+        ) {
             throw new ShouldNotHappenException(
                 message: __CLASS__
                 . ' $className must be a valid class name, '

@@ -7,7 +7,4 @@ namespace Tests\Cases\StaticClass;
 /**
  * @static
  */
-class StaticParent
-{
-    protected function __construct() {}
-}
+trait NestedStaticTrait {}

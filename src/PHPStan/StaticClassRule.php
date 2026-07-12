@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Northrook\PHPStan;
 
@@ -35,7 +35,7 @@ final class StaticClassRule implements Rule
      */
     public function processNode(Node $node, Scope $scope): array
     {
-        if (! $node instanceof Class_) {
+        if (! $node instanceof Class_ || $node->isAnonymous()) {
             return [];
         }
 
@@ -80,10 +80,30 @@ final class StaticClassRule implements Rule
         }
 
         foreach ([$reflection, ...$reflection->getParents()] as $type) {
-            foreach ($type->getTraits() as $trait) {
-                if (PhpDocTag::classHas($trait, self::TAG)) {
-                    return $this->label($trait);
-                }
+            $imposedBy = $this->staticImposedByTraits($type);
+
+            if ($imposedBy !== null) {
+                return $imposedBy;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @return null|string  labelling trait that imposed `@static`
+     */
+    private function staticImposedByTraits(ClassReflection $type): null|string
+    {
+        foreach ($type->getTraits() as $trait) {
+            if (PhpDocTag::classHas($trait, self::TAG)) {
+                return $this->label($trait);
+            }
+
+            $imposedBy = $this->staticImposedByTraits($trait);
+
+            if ($imposedBy !== null) {
+                return $imposedBy;
             }
         }
 

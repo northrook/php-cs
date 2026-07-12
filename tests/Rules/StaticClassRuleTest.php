@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Tests\Rules;
 
@@ -77,9 +77,30 @@ final class StaticClassRuleTest extends PHPStanRuleTest
         $this->expect(__DIR__ . '/../Cases/StaticClass/UsesStaticTraitPrivate.php', []);
     }
 
+    public function testReportsNestedTraitImposedPublicConstructor(): void
+    {
+        $this->expect(__DIR__ . '/../Cases/StaticClass/UsesNestedStaticTraitPublic.php', [
+            [
+                'Class Tests\Cases\StaticClass\UsesNestedStaticTraitPublic is @static but has a public constructor.',
+                7,
+                'Imposed by trait Tests\Cases\StaticClass\NestedStaticTrait.',
+            ],
+        ]);
+    }
+
+    public function testPassesNestedTraitImposedPrivateConstructor(): void
+    {
+        $this->expect(__DIR__ . '/../Cases/StaticClass/UsesNestedStaticTraitPrivate.php', []);
+    }
+
     public function testIgnoresUnconstrainedClass(): void
     {
         $this->expect(__DIR__ . '/../Cases/StaticClass/Unconstrained.php', []);
+    }
+
+    public function testIgnoresAnonymousClass(): void
+    {
+        $this->expect(__DIR__ . '/../Cases/StaticClass/HostsAnonymous.php', []);
     }
 
     protected function getRule(): Rule

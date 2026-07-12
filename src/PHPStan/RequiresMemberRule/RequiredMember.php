@@ -170,10 +170,23 @@ abstract class RequiredMember implements Stringable
         }
 
         if ($resolveFrom instanceof ReflectionType) {
-            $resolveFrom = \str_replace(['?'], ['null|'], $resolveFrom->__toString());
+            $resolveFrom = $resolveFrom->__toString();
         }
 
+        $resolveFrom = \str_replace('?', 'null|', $resolveFrom);
+        $resolveFrom = \strtr($resolveFrom, self::REMOVE_WHITESPACE);
+
         // TODO: [low] Allow for double-pipe OR `||` to mean any one of
-        return \array_filter(\explode('|', \strtr($resolveFrom, self::REMOVE_WHITESPACE)));
+        $types = [];
+
+        foreach (\explode('|', $resolveFrom) as $type) {
+            if ($type === '') {
+                continue;
+            }
+
+            $types[] = \str_ends_with($type, '[]') ? 'array' : $type;
+        }
+
+        return $types;
     }
 }

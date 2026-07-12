@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Tests\Rules;
 
@@ -33,6 +33,17 @@ final class FinalTraitMethodRuleTest extends PHPStanRuleTest
             [
                 'Method Tests\Cases\FinalTraitMethod\TraitOverridesFinal::sealed() overrides final method sealed by trait Tests\Cases\FinalTraitMethod\SealedTrait.',
                 11,
+                'PHP does not enforce a trait\'s `final` on the using class, silently breaking the seal.',
+            ],
+        ]);
+    }
+
+    public function testReportsSubclassOverridingParentTraitFinalMethod(): void
+    {
+        $this->expect(__DIR__ . '/../Cases/FinalTraitMethod/SubclassOverridesFinal.php', [
+            [
+                'Method Tests\Cases\FinalTraitMethod\SubclassOverridesFinal::sealed() overrides final method sealed by trait Tests\Cases\FinalTraitMethod\SealedTrait.',
+                9,
                 'PHP does not enforce a trait\'s `final` on the using class, silently breaking the seal.',
             ],
         ]);

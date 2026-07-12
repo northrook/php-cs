@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Tests\Cases\SingletonClass;
 
@@ -11,7 +11,7 @@ use Northrook\Contracts\Interfaces\SingletonInterface;
  */
 class Satisfied implements SingletonInterface
 {
-    private static ?self $instance = null;
+    private static null|self $instance = null;
 
     private function __construct() {}
 
