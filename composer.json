@@ -20,7 +20,10 @@
   "autoload-dev": {
     "psr-4": {
       "Tests\\": "tests"
-    }
+    },
+    "files": [
+      "tests/Stubs/SingletonInterface.php"
+    ]
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
@@ -36,8 +39,8 @@
     "phpunit/phpunit": "^13.2"
   },
   "scripts": {
-    "php-cs-config": "php-cs-config.php",
-    "collision": "collision-check.php",
+    "php-cs-config": "vendor/bin/php-cs-config.php",
+    "collision": "vendor/bin/collision-check.php",
     "phpstan": "vendor/bin/phpstan analyse",
     "test": "vendor/bin/phpunit",
     "fmt": "dprint fmt",

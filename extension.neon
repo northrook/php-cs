@@ -6,3 +6,5 @@ rules:
 	- Northrook\PHPStan\InterfaceRequiresMemberRule
 	- Northrook\PHPStan\LooseAbstractMemberRule
 	- Northrook\PHPStan\FinalTraitMethodRule
+	- Northrook\PHPStan\StaticClassRule
+	- Northrook\PHPStan\SingletonClassRule

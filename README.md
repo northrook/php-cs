@@ -5,7 +5,7 @@ Shared formatting and static analysis configuration.
 This package provides:
 
 - **[dPrint](https://dprint.dev/)** formatting via a shared `dprint.json`
-- **[PHPStan](https://phpstan.org/)** at level `9`, with custom rules for native PHPDoc member contracts (`@method`, `@property`, `@const`) and `@abstract`
+- **[PHPStan](https://phpstan.org/)** at level `9`, with custom rules for native PHPDoc member contracts (`@method`, `@property`, `@const`), `@abstract`, `@static`, and `@singleton`
 
 The conventions here prioritize ergonomics over PSR alignment.
 
@@ -37,6 +37,16 @@ The script copies the shared `dprint.json`, generates a project `phpstan.neon`, 
 
 - `require-dev` `phpstan/phpstan`
 - `scripts.phpstan` `vendor/bin/phpstan analyse`
+- `scripts.php-cs-config` `vendor/bin/php-cs-config.php`
+- `scripts.collision` `vendor/bin/collision-check.php`
+
+After setup, these run as Composer scripts from the project root:
+
+```bash
+composer php-cs-config
+composer collision
+composer phpstan
+```
 
 Pass `--force` to overwrite existing config files or refresh values that were already set.
 
@@ -140,6 +150,42 @@ abstract class Base
 
 A concrete class must declare its own versions of these members, inheritance alone is not enough.
 
+### `@static` tag
+
+Mark a class (or trait) as a static utility type: it must have a **non-public** constructor (`private` or `protected`). `final` is not required.
+
+```php
+/**
+ * @static
+ */
+class Hash
+{
+    private function __construct() {}
+
+    public static function checksum(string $value): string { /* ... */ }
+}
+```
+
+Subclasses must follow the same constructor rule. A `@static` trait imposes the rule on every class that uses it.
+
+Reported with the `staticClass.publicConstructor` identifier.
+
+### `@singleton` tag
+
+Mark a class as a singleton façade. It must implement `\Northrook\Contracts\Interfaces\SingletonInterface`. This is intentionally only an interface check — extending `Northrook\Contracts\Singleton` is the usual way to satisfy the pattern, but is not required by the rule.
+
+```php
+/**
+ * @singleton
+ */
+final class Debug extends Singleton
+{
+    // ...
+}
+```
+
+Reported with the `singleton.missingInterface` identifier.
+
 ### Sealed trait methods
 
 Errors when a class, trait, or enum body redeclares a `final` method inherited from a directly-used trait.
@@ -173,7 +219,7 @@ Reported with the `finalTraitMethod.overridden` identifier.
 
 The package ships `.phpstorm.meta.php`.
 
-PhpStorm recognizes `@const` and `@abstract` in docblocks (in addition to the built-in `@method` and `@property` support).
+PhpStorm recognizes `@const`, `@abstract`, `@static`, and `@singleton` in docblocks (in addition to the built-in `@method` and `@property` support).
 
 ## Validation
 

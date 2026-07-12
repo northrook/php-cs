@@ -75,8 +75,10 @@ if (! \is_file($packageComposerPath)) {
 /** @var array<string, mixed> $packageComposer */
 $packageComposer = \json_decode((string) \file_get_contents($packageComposerPath), true, 512, JSON_THROW_ON_ERROR);
 
-$phpstanVersion = $packageComposer['require']['phpstan/phpstan'] ?? null;
-$phpstanScript  = $packageComposer['scripts']['phpstan'] ?? null;
+$phpstanVersion     = $packageComposer['require']['phpstan/phpstan'] ?? null;
+$phpstanScript      = $packageComposer['scripts']['phpstan'] ?? null;
+$phpCsConfigScript  = $packageComposer['scripts']['php-cs-config'] ?? null;
+$collisionScript    = $packageComposer['scripts']['collision'] ?? null;
 
 if (! \is_string($phpstanVersion)) {
     \fwrite(STDERR, format('Package composer.json is missing <teal>require.phpstan/phpstan</teal>.', STDERR) . "\n");
@@ -86,6 +88,18 @@ if (! \is_string($phpstanVersion)) {
 
 if (! \is_string($phpstanScript)) {
     \fwrite(STDERR, format('Package composer.json is missing <teal>scripts.phpstan</teal>.', STDERR) . "\n");
+
+    exit(1);
+}
+
+if (! \is_string($phpCsConfigScript)) {
+    \fwrite(STDERR, format('Package composer.json is missing <teal>scripts.php-cs-config</teal>.', STDERR) . "\n");
+
+    exit(1);
+}
+
+if (! \is_string($collisionScript)) {
+    \fwrite(STDERR, format('Package composer.json is missing <teal>scripts.collision</teal>.', STDERR) . "\n");
 
     exit(1);
 }
@@ -147,6 +161,8 @@ if (! isset($consumerComposer['scripts']) || ! \is_array($consumerComposer['scri
 }
 
 $mergeString($consumerComposer['scripts'], 'phpstan', $phpstanScript, 'scripts.phpstan');
+$mergeString($consumerComposer['scripts'], 'php-cs-config', $phpCsConfigScript, 'scripts.php-cs-config');
+$mergeString($consumerComposer['scripts'], 'collision', $collisionScript, 'scripts.collision');
 
 if ($composerChanged) {
     $json = \json_encode($consumerComposer, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
