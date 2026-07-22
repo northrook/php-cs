@@ -5,6 +5,10 @@ parameters:
 	finalTraitMethod:
 		testDirectories:
 			- tests
+	ignoreErrors:
+		-
+			message: '# will always evaluate to #'
+			path: *.php
 
 parametersSchema:
 	finalTraitMethod: structure([
