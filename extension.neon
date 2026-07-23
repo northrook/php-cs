@@ -5,6 +5,7 @@ parameters:
 	finalTraitMethod:
 		testDirectories:
 			- tests
+	reportUnmatchedIgnoredErrors: false
 	ignoreErrors:
 		-
 			message: '# will always evaluate to #'
