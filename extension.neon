@@ -9,6 +9,9 @@ parameters:
 		-
 			message: '# will always evaluate to #'
 			path: *.php
+		-
+			message: '#Dead catch #'
+			path: *.php
 
 parametersSchema:
 	finalTraitMethod: structure([
