@@ -174,8 +174,9 @@ final class ClassRequiresMemberRule implements Rule
      * @return bool
      * @throws ShouldNotHappenException
      */
-    private function skipInvalidNode(Node $node): bool
-    {
+    private function skipInvalidNode(
+        Node $node,
+    ): bool {
         if (! $node instanceof Class_ || $node->isAnonymous() || $node->isAbstract()) {
             return true;
         }

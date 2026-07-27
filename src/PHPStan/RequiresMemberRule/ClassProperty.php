@@ -46,7 +46,21 @@ final class ClassProperty extends RequiredMember
 
     protected function reflectionTypeOf(): array
     {
-        return $this->explodeTypes($this->getReflection()->getType());
+        $native = $this->explodeTypes($this->getReflection()->getType());
+
+        // PHPStan forbids `callable` on properties (`property.callableType`);
+        // fall back to the resolved PHPDoc/@var type when native is `mixed` or absent.
+        if ($native !== [] && $native !== ['mixed']) {
+            return $native;
+        }
+
+        if (! $this->phpstanClass->hasProperty($this->name)) {
+            return $native;
+        }
+
+        $type = $this->phpstanClass->getProperty($this->name, $this->scope)->getReadableType();
+
+        return $this->explodeTypes($type->describe(\PHPStan\Type\VerbosityLevel::typeOnly()));
     }
 
     protected function getReflection(): ReflectionProperty

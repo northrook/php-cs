@@ -15,8 +15,10 @@ final class PhpDocTag
      * @param string  $phpDocComment
      * @param string  $tag  e.g. `@static`
      */
-    public static function has(string $phpDocComment, string $tag): bool
-    {
+    public static function has(
+        string $phpDocComment,
+        string $tag,
+    ): bool {
         if (\str_contains($phpDocComment, "\r")) {
             $phpDocComment = \strtr($phpDocComment, ["\r\n" => "\n", "\r" => "\n"]);
         }
@@ -30,8 +32,10 @@ final class PhpDocTag
         return false;
     }
 
-    public static function classHas(ClassReflection $reflection, string $tag): bool
-    {
+    public static function classHas(
+        ClassReflection $reflection,
+        string $tag,
+    ): bool {
         $phpDocComment = $reflection->getNativeReflection()->getDocComment();
 
         return $phpDocComment !== false && self::has($phpDocComment, $tag);

@@ -94,7 +94,7 @@ dprint fmt
 
 Declare members that implementing or extending types must provide, using standard PHPDoc tags.
 
-Checked on **concrete classes**, and on **interfaces themselves**.
+Checked on **concrete classes**. On **interfaces**, only `@method` and `@const` must be declared natively — `@property*` is an implementor contract enforced on concrete classes.
 
 | Tag         | Example                                |
 |-------------|----------------------------------------|
@@ -102,7 +102,7 @@ Checked on **concrete classes**, and on **interfaces themselves**.
 | `@property` | `@property string $name`               |
 | `@method`   | `@method string run()` or `@method static static register()` |
 
-`@property-read` and `@property-write` are treated like `@property`.
+`@property-read` and `@property-write` are treated like `@property` for implementors.
 
 `@method` can require `static`. Types are checked for `@method`, `@property`, and `@const`.
 

@@ -22,11 +22,6 @@ final class InterfaceRequiresMemberRuleTest extends PHPStanRuleTest
                 'Constant required by Interface Tests\Cases\InterfaceRequiresMember\MissingMembers.',
             ],
             [
-                'Missing Property Tests\Cases\InterfaceRequiresMember\MissingMembers->name.',
-                12,
-                'Property required by Interface Tests\Cases\InterfaceRequiresMember\MissingMembers.',
-            ],
-            [
                 'Missing Method Tests\Cases\InterfaceRequiresMember\MissingMembers->greet.',
                 12,
                 'Method required by Interface Tests\Cases\InterfaceRequiresMember\MissingMembers.',

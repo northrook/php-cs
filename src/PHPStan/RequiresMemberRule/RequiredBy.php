@@ -37,8 +37,10 @@ final readonly class RequiredBy implements Stringable
      * @return RequiredBy
      * @throws ShouldNotHappenException
      */
-    public static function from(string $type, string $className): RequiredBy
-    {
+    public static function from(
+        string $type,
+        string $className,
+    ): RequiredBy {
         if (false === ( $type === 'Class' || $type === 'Interface' || $type === 'Trait' )) {
             throw new ShouldNotHappenException(
                 message: __CLASS__

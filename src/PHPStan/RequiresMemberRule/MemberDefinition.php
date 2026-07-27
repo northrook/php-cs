@@ -26,23 +26,27 @@ final readonly class MemberDefinition
         public array $unexpected,
     ) {}
 
-    public function required(string $separator = '|'): string
-    {
+    public function required(
+        string $separator = '|',
+    ): string {
         return \implode($separator, $this->required);
     }
 
-    public function missing(string $separator = '|'): string
-    {
+    public function missing(
+        string $separator = '|',
+    ): string {
         return \implode($separator, $this->missing);
     }
 
-    public function declared(string $separator = '|'): string
-    {
+    public function declared(
+        string $separator = '|',
+    ): string {
         return \implode($separator, $this->declared);
     }
 
-    public function unexpected(string $separator = '|'): string
-    {
+    public function unexpected(
+        string $separator = '|',
+    ): string {
         return \implode($separator, $this->unexpected);
     }
 
@@ -53,8 +57,10 @@ final readonly class MemberDefinition
      * @return null|MemberDefinition
      * @throws ShouldNotHappenException
      */
-    public static function validate(array $required, array $declared): null|MemberDefinition
-    {
+    public static function validate(
+        array $required,
+        array $declared,
+    ): null|MemberDefinition {
         // Bail early
         if ($required === []) {
             return null;
@@ -87,8 +93,9 @@ final readonly class MemberDefinition
      * @return string[]
      * @throws ShouldNotHappenException
      */
-    private static function prepare(array $array): array
-    {
+    private static function prepare(
+        array $array,
+    ): array {
         /** @var array<string,null> $prepared */
         $prepared = [
             'static'    => null,

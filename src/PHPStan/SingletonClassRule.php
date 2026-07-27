@@ -35,8 +35,10 @@ final class SingletonClassRule implements Rule
      *
      * @throws ShouldNotHappenException
      */
-    public function processNode(Node $node, Scope $scope): array
-    {
+    public function processNode(
+        Node $node,
+        Scope $scope,
+    ): array {
         if (! $node instanceof Class_ || $node->isAnonymous()) {
             return [];
         }

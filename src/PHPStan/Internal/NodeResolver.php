@@ -20,8 +20,9 @@ trait NodeResolver
      * @throws ShouldNotHappenException
      * @final
      */
-    final protected function resolveName(Node $from): string
-    {
+    final protected function resolveName(
+        Node $from,
+    ): string {
         $nodeName = $from->namespacedName ?? $from->name ?? null;
 
         if ($nodeName === null) {

@@ -33,8 +33,10 @@ final class StaticClassRule implements Rule
      *
      * @throws ShouldNotHappenException
      */
-    public function processNode(Node $node, Scope $scope): array
-    {
+    public function processNode(
+        Node $node,
+        Scope $scope,
+    ): array {
         if (! $node instanceof Class_ || $node->isAnonymous()) {
             return [];
         }
@@ -67,8 +69,9 @@ final class StaticClassRule implements Rule
     /**
      * @return null|string  labelling type that imposed `@static`
      */
-    private function staticImposedBy(ClassReflection $reflection): null|string
-    {
+    private function staticImposedBy(
+        ClassReflection $reflection,
+    ): null|string {
         if (PhpDocTag::classHas($reflection, self::TAG)) {
             return $this->label($reflection);
         }
@@ -93,8 +96,9 @@ final class StaticClassRule implements Rule
     /**
      * @return null|string  labelling trait that imposed `@static`
      */
-    private function staticImposedByTraits(ClassReflection $type): null|string
-    {
+    private function staticImposedByTraits(
+        ClassReflection $type,
+    ): null|string {
         foreach ($type->getTraits() as $trait) {
             if (PhpDocTag::classHas($trait, self::TAG)) {
                 return $this->label($trait);
@@ -110,8 +114,9 @@ final class StaticClassRule implements Rule
         return null;
     }
 
-    private function label(ClassReflection $reflection): string
-    {
+    private function label(
+        ClassReflection $reflection,
+    ): string {
         if ($reflection->isTrait()) {
             return 'trait ' . $reflection->getName();
         }

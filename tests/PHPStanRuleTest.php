@@ -16,8 +16,10 @@ abstract class PHPStanRuleTest extends RuleTestCase
     /**
      * @param list<array{0: string, 1: int, 2?: null|string}>  $errors
      */
-    final protected function expect(string $fixture, array $errors): void
-    {
+    final protected function expect(
+        string $fixture,
+        array $errors,
+    ): void {
         $this->analyse([$fixture], $errors);
     }
 }

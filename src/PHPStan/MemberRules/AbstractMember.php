@@ -29,8 +29,9 @@ final readonly class AbstractMember
         public string $key,
     ) {}
 
-    public function name(false|string $className = false): string
-    {
+    public function name(
+        false|string $className = false,
+    ): string {
         if ($className === false) {
             return $this->name;
         }

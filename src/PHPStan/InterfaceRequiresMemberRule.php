@@ -6,6 +6,7 @@ namespace Northrook\PHPStan;
 
 use Northrook\PHPStan\Internal\ErrorHandler;
 use Northrook\PHPStan\Internal\NodeResolver;
+use Northrook\PHPStan\RequiresMemberRule\ClassProperty;
 use Northrook\PHPStan\RequiresMemberRule\RequiredMemberCollector;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Interface_;
@@ -32,8 +33,10 @@ final class InterfaceRequiresMemberRule implements Rule
      *
      * @throws ShouldNotHappenException
      */
-    public function processNode(Node $node, Scope $scope): array
-    {
+    public function processNode(
+        Node $node,
+        Scope $scope,
+    ): array {
         if (! $node instanceof Interface_) {
             return [];
         }
@@ -47,6 +50,12 @@ final class InterfaceRequiresMemberRule implements Rule
         }
 
         foreach ($requiredMembers as $member) {
+            // @property* on interfaces is an implementor contract (ClassRequiresMemberRule).
+            // Interfaces themselves are only required to declare @method / @const natively.
+            if ($member instanceof ClassProperty) {
+                continue;
+            }
+
             $member->reflect($reflection, $scope);
             $memberName = $member->name($className);
             $definition = $member->label . ' ' . $memberName;

@@ -46,6 +46,8 @@ abstract class RequiredMember implements Stringable
     /** @var ReflectionClass */
     protected ReflectionClass $classReflection;
 
+    protected ClassReflection $phpstanClass;
+
     protected string $className;
 
     protected Scope $scope;
@@ -72,13 +74,16 @@ abstract class RequiredMember implements Stringable
     /**
      * @throws ShouldNotHappenException
      */
-    final public function reflect(ClassReflection $classReflection, Scope $scope): self
-    {
+    final public function reflect(
+        ClassReflection $classReflection,
+        Scope $scope,
+    ): self {
         if (! $classReflection->getNativeReflection() instanceof ReflectionClass) {
             throw new ShouldNotHappenException();
         }
 
         $this->classReflection ??= $classReflection->getNativeReflection();
+        $this->phpstanClass    ??= $classReflection;
         $this->className       ??= $classReflection->getName();
         $this->scope           ??= $scope;
 
@@ -98,8 +103,9 @@ abstract class RequiredMember implements Stringable
      *
      * @return array|string[]
      */
-    protected function resolveModifiers(null|array $modifiers = null): array
-    {
+    protected function resolveModifiers(
+        null|array $modifiers = null,
+    ): array {
         $modifiers ??= $this->modifiers;
 
         if (\array_key_exists('readonly', $modifiers) && $this->classReflection->isReadOnly()) {
@@ -151,8 +157,9 @@ abstract class RequiredMember implements Stringable
         return $this->type . '~' . $this->name;
     }
 
-    public function name(false|string $className = false): string
-    {
+    public function name(
+        false|string $className = false,
+    ): string {
         if ($className === false) {
             return $this->name;
         }
@@ -161,10 +168,11 @@ abstract class RequiredMember implements Stringable
     }
 
     /**
-     * @return non-empty-string[]
+     * @return string[]
      */
-    final protected function explodeTypes(null|string|ReflectionType $resolveFrom): array
-    {
+    final protected function explodeTypes(
+        null|string|ReflectionType $resolveFrom,
+    ): array {
         if ($resolveFrom === null) {
             return [];
         }
@@ -184,9 +192,35 @@ abstract class RequiredMember implements Stringable
                 continue;
             }
 
-            $types[] = \str_ends_with($type, '[]') ? 'array' : $type;
+            $types[] = self::normalizeTypeToken($type);
         }
 
         return $types;
+    }
+
+    /**
+     * Normalize a single union member for native ↔ PHPDoc comparison.
+     *
+     * PHPStan `typeOnly` describe wraps callables as `(callable)`; native reflection
+     * yields `callable`. Generics like `array<mixed>` must compare as `array`.
+     *
+     * @return string
+     */
+    private static function normalizeTypeToken(
+        string $type,
+    ): string {
+        while (\str_starts_with($type, '(') && \str_ends_with($type, ')')) {
+            $type = \substr($type, 1, -1);
+        }
+
+        if (( $generic = \strpos($type, '<') ) !== false) {
+            $type = \substr($type, 0, $generic);
+        }
+
+        if (\str_ends_with($type, '[]')) {
+            return 'array';
+        }
+
+        return $type;
     }
 }

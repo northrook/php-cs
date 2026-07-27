@@ -22,8 +22,11 @@ trait ErrorHandler
      *
      * @final
      */
-    protected function error(string $message, string $identifier, bool $ignorable = false): RuleErrorBuilder
-    {
+    protected function error(
+        string $message,
+        string $identifier,
+        bool $ignorable = false,
+    ): RuleErrorBuilder {
         $error = RuleErrorBuilder::message($message)->identifier($identifier);
 
         if ($ignorable === false) {

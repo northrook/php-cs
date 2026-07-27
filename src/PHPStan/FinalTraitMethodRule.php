@@ -33,8 +33,10 @@ final class FinalTraitMethodRule implements Rule
      *
      * @throws ShouldNotHappenException
      */
-    public function processNode(Node $node, Scope $scope): array
-    {
+    public function processNode(
+        Node $node,
+        Scope $scope,
+    ): array {
         if (! $node instanceof Class_ && ! $node instanceof Trait_ && ! $node instanceof Enum_) {
             return [];
         }
@@ -84,8 +86,9 @@ final class FinalTraitMethodRule implements Rule
     /**
      * @return array<string, string> lowercased method name => declaring trait
      */
-    private function finalTraitMethods(\PHPStan\Reflection\ClassReflection $reflection): array
-    {
+    private function finalTraitMethods(
+        \PHPStan\Reflection\ClassReflection $reflection,
+    ): array {
         $finalTraitMethods = [];
 
         foreach ([$reflection, ...$reflection->getParents()] as $type) {
@@ -103,8 +106,9 @@ final class FinalTraitMethodRule implements Rule
         return $finalTraitMethods;
     }
 
-    private function isTestFile(string $file): bool
-    {
+    private function isTestFile(
+        string $file,
+    ): bool {
         if ($this->testDirectories === []) {
             return false;
         }

@@ -37,8 +37,10 @@ final class LooseAbstractMemberRule implements Rule
      * @throws \PHPStan\Reflection\MissingConstantFromReflectionException
      * @throws \PHPStan\Reflection\MissingMethodFromReflectionException
      */
-    public function processNode(Node $node, Scope $scope): array
-    {
+    public function processNode(
+        Node $node,
+        Scope $scope,
+    ): array {
         if (! $node instanceof Class_ || $node->isAnonymous()) {
             return [];
         }
@@ -70,8 +72,9 @@ final class LooseAbstractMemberRule implements Rule
      * @throws \PHPStan\Reflection\MissingConstantFromReflectionException
      * @throws \PHPStan\Reflection\MissingMethodFromReflectionException
      */
-    private function requiredMembers(Scope $scope): array
-    {
+    private function requiredMembers(
+        Scope $scope,
+    ): array {
         $requiredMembers = [];
 
         foreach ([
@@ -145,8 +148,9 @@ final class LooseAbstractMemberRule implements Rule
         return $requiredMembers;
     }
 
-    private function getNodeLabel(ClassReflection $node): string
-    {
+    private function getNodeLabel(
+        ClassReflection $node,
+    ): string {
         $fragments = [];
 
         if ($node->isAbstract()) {

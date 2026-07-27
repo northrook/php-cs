@@ -18,8 +18,9 @@ final class RequiredMemberCollector
      * @return array<string, RequiredMember>
      * @throws ShouldNotHappenException
      */
-    public static function collect(ClassReflection $source): array
-    {
+    public static function collect(
+        ClassReflection $source,
+    ): array {
         $resolved = $source->getResolvedPhpDoc();
 
         if ($resolved === null) {
