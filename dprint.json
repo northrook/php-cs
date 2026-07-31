@@ -7,7 +7,7 @@
     "**/var/**"
   ],
   "plugins": [
-    "https://plugins.dprint.dev/mago-0.20.0.wasm"
+    "https://plugins.dprint.dev/mago-0.23.0.wasm"
   ],
   "mago": {
     "phpVersionMajor": 8,
