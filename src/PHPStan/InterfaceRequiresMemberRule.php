@@ -6,7 +6,7 @@ namespace Northrook\PHPStan;
 
 use Northrook\PHPStan\Internal\ErrorHandler;
 use Northrook\PHPStan\Internal\NodeResolver;
-use Northrook\PHPStan\RequiresMemberRule\ClassProperty;
+use Northrook\PHPStan\RequiresMemberRule\ClassConstant;
 use Northrook\PHPStan\RequiresMemberRule\RequiredMemberCollector;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Interface_;
@@ -50,9 +50,9 @@ final class InterfaceRequiresMemberRule implements Rule
         }
 
         foreach ($requiredMembers as $member) {
-            // @property* on interfaces is an implementor contract (ClassRequiresMemberRule).
-            // Interfaces themselves are only required to declare @method / @const natively.
-            if ($member instanceof ClassProperty) {
+            // @method / @property* on interfaces are implementor contracts
+            // (ClassRequiresMemberRule). Only @const must be declared natively here.
+            if (! $member instanceof ClassConstant) {
                 continue;
             }
 

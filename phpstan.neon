@@ -1,7 +1,7 @@
 includes:
 	- extension.neon
 parameters:
-	phpVersion: 80400
+	phpVersion: 80500
 	paths:
 		- src
 		- tests

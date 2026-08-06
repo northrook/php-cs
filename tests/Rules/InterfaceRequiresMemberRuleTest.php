@@ -13,7 +13,7 @@ use Tests\PHPStanRuleTest;
  */
 final class InterfaceRequiresMemberRuleTest extends PHPStanRuleTest
 {
-    public function testReportsMissingMembersOnInterface(): void
+    public function testReportsMissingConstOnInterface(): void
     {
         $this->expect(__DIR__ . '/../Cases/InterfaceRequiresMember/MissingMembers.php', [
             [
@@ -21,17 +21,17 @@ final class InterfaceRequiresMemberRuleTest extends PHPStanRuleTest
                 12,
                 'Constant required by Interface Tests\Cases\InterfaceRequiresMember\MissingMembers.',
             ],
-            [
-                'Missing Method Tests\Cases\InterfaceRequiresMember\MissingMembers->greet.',
-                12,
-                'Method required by Interface Tests\Cases\InterfaceRequiresMember\MissingMembers.',
-            ],
         ]);
     }
 
-    public function testPassesWhenInterfaceDeclaresRequiredMembers(): void
+    public function testPassesWhenInterfaceDeclaresRequiredConst(): void
     {
         $this->expect(__DIR__ . '/../Cases/InterfaceRequiresMember/Satisfied.php', []);
+    }
+
+    public function testPassesWhenInterfaceOnlyDocumentsMethod(): void
+    {
+        $this->expect(__DIR__ . '/../Cases/InterfaceRequiresMember/MethodOnly.php', []);
     }
 
     protected function getRule(): Rule

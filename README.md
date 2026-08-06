@@ -12,7 +12,7 @@ The conventions here prioritize ergonomics over PSR alignment.
 
 ## Requirements
 
-- PHP 8.4+
+- PHP 8.5+
 - [Composer](https://getcomposer.org/)
 - [dPrint CLI](https://dprint.dev/install/) (optional, for formatting)
 - [PHPStan](https://phpstan.org/) `2.2+`
@@ -94,7 +94,7 @@ dprint fmt
 
 Declare members that implementing or extending types must provide, using standard PHPDoc tags.
 
-Checked on **concrete classes**. On **interfaces**, only `@method` and `@const` must be declared natively — `@property*` is an implementor contract enforced on concrete classes.
+Checked on **concrete classes** (and skipped for abstract classes). On **interfaces**, only `@const` must be declared natively — `@method` and `@property*` are implementor contracts enforced on concrete classes.
 
 | Tag         | Example                                |
 |-------------|----------------------------------------|

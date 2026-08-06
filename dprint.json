@@ -11,7 +11,7 @@
   ],
   "mago": {
     "phpVersionMajor": 8,
-    "phpVersionMinor": 4,
+    "phpVersionMinor": 5,
     "printWidth": 120,
     "endOfLine": "lf",
     "useTabs": false,
