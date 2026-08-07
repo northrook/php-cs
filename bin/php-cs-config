@@ -183,48 +183,48 @@ if ($composerChanged) {
 
 //endregion Composer setup
 
-//region Copy config files
+//region Generate dprint.json
 
-$copyConfigFile = static function(
-    string $filename,
-) use ($packageRoot, $projectRoot, $force): void {
-    $source = $packageRoot . '/' . $filename;
-    $target = $projectRoot . '/' . $filename;
+$generateDprintConfig = static function() use ($packageRoot, $projectRoot): void {
+    $source = $packageRoot . '/dprint.json';
+    $target = $projectRoot . '/dprint.json';
 
     if (! \is_file($source)) {
-        \fwrite(STDERR, format("Package <teal>{$filename}</teal> not found at {$source}.", STDERR) . "\n");
+        \fwrite(STDERR, format("Package <teal>dprint.json</teal> not found at {$source}.", STDERR) . "\n");
 
         exit(1);
     }
 
     if (\realpath($source) === \realpath($target)) {
-        echo format("<teal>{$filename}</teal> is already at the project root.\n");
+        echo format("<teal>dprint.json</teal> is the package canonical config; left unchanged.\n");
 
         return;
     }
 
-    if (\is_file($target) && ! $force) {
-        \fwrite(
-            STDERR,
-            format("<teal>{$filename}</teal> already exists. Pass <yellow bold>--force</yellow> to overwrite.", STDERR)
-                . "\n",
-        );
+    $json = \json_encode(
+        ['extends' => 'vendor/northrook/php-cs/dprint.json'],
+        JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR,
+    );
+    $json = \preg_replace('/^    /m', '  ', $json);
 
-        return;
-    }
-
-    if (! \copy($source, $target)) {
-        \fwrite(STDERR, format("Failed to copy <teal>{$filename}</teal> to {$target}.", STDERR) . "\n");
+    if ($json === null || ! \is_string($json)) {
+        \fwrite(STDERR, format('Failed to encode <teal>dprint.json</teal>.', STDERR) . "\n");
 
         exit(1);
     }
 
-    echo format("Copied <teal>{$filename}</teal> to {$target}\n");
+    if (\file_put_contents($target, $json . "\n") === false) {
+        \fwrite(STDERR, format("Failed to write <teal>dprint.json</teal> to {$target}.", STDERR) . "\n");
+
+        exit(1);
+    }
+
+    echo format("Wrote <teal>dprint.json</teal> extending <blue>php-cs</blue> at {$target}\n");
 };
 
-$copyConfigFile('dprint.json');
+$generateDprintConfig();
 
-//endregion Copy config files
+//endregion Generate dprint.json
 
 //region Generate phpstan.neon
 

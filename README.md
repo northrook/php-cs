@@ -33,7 +33,7 @@ vendor/bin/php-cs-config
 composer update
 ```
 
-The script copies the shared `dprint.json`, generates a project `phpstan.neon`, and updates `composer.json`:
+The script writes a project `dprint.json` that extends the package standard, generates a project `phpstan.neon`, and updates `composer.json`:
 
 - `require-dev` `phpstan/phpstan`
 - `scripts.phpstan` `vendor/bin/phpstan analyse`
@@ -48,7 +48,7 @@ composer collision
 composer phpstan
 ```
 
-Pass `--force` to overwrite existing config files or refresh values that were already set.
+`dprint.json` is always rewritten so the formatting standard stays locked to the package. Pass `--force` to overwrite an existing `phpstan.neon` or refresh `composer.json` values that were already set.
 
 ### PHPStan
 
@@ -80,7 +80,13 @@ composer phpstan
 
 Install the [dPrint CLI](https://dprint.dev/install/).
 
-The setup script copies the shared config into the project.
+The setup script always writes a thin project `dprint.json` that extends the package canonical config (plugin options are locked):
+
+```json
+{
+  "extends": "vendor/northrook/php-cs/dprint.json"
+}
+```
 
 Format PHP files:
 

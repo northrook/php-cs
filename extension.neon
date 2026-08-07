@@ -8,10 +8,16 @@ parameters:
 	reportUnmatchedIgnoredErrors: false
 	ignoreErrors:
 		-
+		    # Static analysis != runtime, allow for runtime validation
 			message: '# will always evaluate to #'
 			path: *.php
 		-
+		    # Defensive catches are not always dead at runtime
 			message: '#Dead catch #'
+			path: *.php
+		-
+			# Allow for discarding returns using (void) casts
+			identifier: method.inVoidCast
 			path: *.php
 
 parametersSchema:
