@@ -122,15 +122,10 @@ Requirements are collected from the class itself, its parents, interfaces, and t
 
 ```php
 /**
- * @method static static register()
+ * @method static static create(string $id)
+ * @property string $name
  */
-abstract class ContractSingleton
-{
-    final protected static function getInstance(): static
-    {
-        return self::$instance ??= self::register();
-    }
-}
+interface NamedFactory {}
 ```
 
 ### `@abstract` tag
@@ -178,19 +173,23 @@ Reported with the `staticClass.publicConstructor` identifier.
 
 ### `@singleton` tag
 
-Mark a class as a singleton façade. It must implement `\Northrook\Contracts\Interfaces\SingletonInterface`. This is intentionally only an interface check — extending `Northrook\Contracts\Singleton` is the usual way to satisfy the pattern, but is not required by the rule.
+Mark a class (or trait) as a singleton façade. It must extend `Northrook\Contracts\Singleton` (from [`northrook/core-contracts`](https://github.com/northrook/core-contracts)).
 
 ```php
 /**
  * @singleton
  */
-final class Debug extends Singleton
+abstract class Facade extends Singleton {}
+
+final class Debug extends Facade
 {
     // ...
 }
 ```
 
-Reported with the `singleton.missingInterface` identifier.
+Subclasses inherit the constraint from a tagged parent. A `@singleton` trait imposes the rule on every class that uses it — including via nested traits or parents that use the trait.
+
+Reported with the `singleton.missingBase` identifier.
 
 ### `@disallows` tag
 
