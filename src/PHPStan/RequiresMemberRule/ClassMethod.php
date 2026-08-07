@@ -23,12 +23,12 @@ final class ClassMethod extends RequiredMember
      * @throws ShouldNotHappenException
      */
     public static function fromMethodTag(
-        string $name,
+        string    $name,
         MethodTag $tag,
-        string $requiredByType,
-        string $requiredByClass,
+        string    $requiredByType,
+        string    $requiredByClass,
     ): self {
-        $member            = new self();
+        $member            = new self;
         $member->name      = $name;
         $member->modifiers = $tag->isStatic() ? ['static' => 'static'] : [];
         $member->typeOf    = $member->explodeTypes(

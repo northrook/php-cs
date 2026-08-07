@@ -25,6 +25,7 @@ rules:
 	- Northrook\PHPStan\LooseAbstractMemberRule
 	- Northrook\PHPStan\StaticClassRule
 	- Northrook\PHPStan\SingletonClassRule
+	- Northrook\PHPStan\DisallowsMethodRule
 
 services:
 	-

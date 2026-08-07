@@ -34,7 +34,7 @@ final class PhpDocTag
 
     public static function classHas(
         ClassReflection $reflection,
-        string $tag,
+        string          $tag,
     ): bool {
         $phpDocComment = $reflection->getNativeReflection()->getDocComment();
 

@@ -76,10 +76,10 @@ abstract class RequiredMember implements Stringable
      */
     final public function reflect(
         ClassReflection $classReflection,
-        Scope $scope,
+        Scope           $scope,
     ): self {
         if (! $classReflection->getNativeReflection() instanceof ReflectionClass) {
-            throw new ShouldNotHappenException();
+            throw new ShouldNotHappenException;
         }
 
         $this->classReflection ??= $classReflection->getNativeReflection();

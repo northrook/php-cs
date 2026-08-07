@@ -34,7 +34,7 @@ final class StaticClassRule implements Rule
      * @throws ShouldNotHappenException
      */
     public function processNode(
-        Node $node,
+        Node  $node,
         Scope $scope,
     ): array {
         if (! $node instanceof Class_ || $node->isAnonymous()) {
@@ -59,7 +59,7 @@ final class StaticClassRule implements Rule
         $visibility = $constructor === null ? 'no' : 'a public';
 
         $this->error(
-            message: "Class {$className} is @static but has {$visibility} constructor.",
+            message   : "Class {$className} is @static but has {$visibility} constructor.",
             identifier: 'staticClass.publicConstructor',
         )->tip("Imposed by {$imposedBy}.");
 

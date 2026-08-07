@@ -31,7 +31,7 @@ final class ClassConstant extends RequiredMember
             );
         }
 
-        $member             = new self();
+        $member             = new self;
         $member->modifiers  = [];
         $member->requiredBy = RequiredBy::from($requiredByType, $requiredByClass);
 
@@ -70,6 +70,6 @@ final class ClassConstant extends RequiredMember
     protected function getReflection(): ReflectionClassConstant
     {
         return $this->reflection ??= $this->classReflection->getReflectionConstant($this->name)
-        ?: throw new ShouldNotHappenException();
+        ?: throw new ShouldNotHappenException;
     }
 }

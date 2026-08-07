@@ -38,7 +38,7 @@ final class ClassRequiresMemberRule implements Rule
      * @throws ShouldNotHappenException
      */
     public function processNode(
-        Node $node,
+        Node  $node,
         Scope $scope,
     ): array {
         if ($this->skipInvalidNode($node)) {
@@ -55,7 +55,7 @@ final class ClassRequiresMemberRule implements Rule
 
             if ($member->notDeclared()) {
                 $this->error(
-                    message: "Missing {$definition}.",
+                    message   : "Missing {$definition}.",
                     identifier: 'requiresMember.notFound',
                 )->tip(
                     $requiredBy,
@@ -68,37 +68,37 @@ final class ClassRequiresMemberRule implements Rule
                 $ignorable = $modifiers->missing === [] && $modifiers->unexpected !== [];
 
                 $this->error(
-                    message: "{$definition} {$modifiers->required()} modifiers.",
+                    message   : "{$definition} {$modifiers->required()} modifiers.",
                     identifier: "requiresMember.{$member->type}.Modifiers",
-                    ignorable: $ignorable,
+                    ignorable : $ignorable,
                 );
 
                 if ($modifiers->missing) {
                     $this->error(
-                        message: "{$definition} missing {$modifiers->missing()}",
+                        message   : "{$definition} missing {$modifiers->missing()}",
                         identifier: "requiresMember.{$member->type}.ModifiersMissing",
                     );
                 }
 
                 if ($modifiers->unexpected && $modifiers->missing === []) {
                     $this->error(
-                        message: "{$definition} unexpected modifiers {$modifiers->unexpected()}",
+                        message   : "{$definition} unexpected modifiers {$modifiers->unexpected()}",
                         identifier: "requiresMember.{$member->type}.ModifiersUnexpected",
-                        ignorable: true,
+                        ignorable : true,
                     );
                 }
 
                 if ($modifiers->declared === []) {
                     $this->error(
-                        message: "{$definition} has no declared modifiers.",
+                        message   : "{$definition} has no declared modifiers.",
                         identifier: "requiresMember.{$member->type}.Modifiers",
-                        ignorable: $ignorable,
+                        ignorable : $ignorable,
                     );
                 } else {
                     $this->error(
-                        message: "{$definition} has {$modifiers->declared()} modifiers.",
+                        message   : "{$definition} has {$modifiers->declared()} modifiers.",
                         identifier: "requiresMember.{$member->type}.Modifiers",
-                        ignorable: $ignorable,
+                        ignorable : $ignorable,
                     );
                 }
             }
@@ -107,37 +107,37 @@ final class ClassRequiresMemberRule implements Rule
                 $ignorable = $typeOf->missing === [] && $typeOf->unexpected !== [];
 
                 $this->error(
-                    message: "{$definition} requires types {$typeOf->required()}",
+                    message   : "{$definition} requires types {$typeOf->required()}",
                     identifier: "requiresMember.{$member->type}.RequiresType",
-                    ignorable: $ignorable,
+                    ignorable : $ignorable,
                 );
 
                 if ($typeOf->missing) {
                     $this->error(
-                        message: "{$definition} missing {$typeOf->missing()}",
+                        message   : "{$definition} missing {$typeOf->missing()}",
                         identifier: "requiresMember.{$member->type}.TypeMissing",
                     );
                 }
 
                 if ($typeOf->unexpected && $typeOf->missing === []) {
                     $this->error(
-                        message: "{$definition} unexpected types {$typeOf->unexpected()}",
+                        message   : "{$definition} unexpected types {$typeOf->unexpected()}",
                         identifier: "requiresMember.{$member->type}.UnexpectedType",
-                        ignorable: true,
+                        ignorable : true,
                     );
                 }
 
                 if ($typeOf->declared === []) {
                     $this->error(
-                        message: "{$definition} has no declared types.",
+                        message   : "{$definition} has no declared types.",
                         identifier: "requiresMember.{$member->type}.UndeclaredType",
-                        ignorable: $ignorable,
+                        ignorable : $ignorable,
                     );
                 } else {
                     $this->error(
-                        message: "{$definition} has {$typeOf->declared()} types.",
+                        message   : "{$definition} has {$typeOf->declared()} types.",
                         identifier: "requiresMember.{$member->type}.DeclaredType",
-                        ignorable: $ignorable,
+                        ignorable : $ignorable,
                     );
                 }
             }

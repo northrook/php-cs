@@ -38,7 +38,7 @@ final class LooseAbstractMemberRule implements Rule
      * @throws \PHPStan\Reflection\MissingMethodFromReflectionException
      */
     public function processNode(
-        Node $node,
+        Node  $node,
         Scope $scope,
     ): array {
         if (! $node instanceof Class_ || $node->isAnonymous()) {
@@ -57,7 +57,7 @@ final class LooseAbstractMemberRule implements Rule
             $definition = $member->definition . ' ' . $memberName;
 
             $this->error(
-                message: "Missing {$definition}.",
+                message   : "Missing {$definition}.",
                 identifier: 'abstractMember.notFound',
             )->tip($member->requiredBy);
         }

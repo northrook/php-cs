@@ -25,7 +25,7 @@ trait ErrorHandler
     protected function error(
         string $message,
         string $identifier,
-        bool $ignorable = false,
+        bool   $ignorable = false,
     ): RuleErrorBuilder {
         $error = RuleErrorBuilder::message($message)->identifier($identifier);
 

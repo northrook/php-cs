@@ -48,7 +48,7 @@ final readonly class AbstractMember
      */
     public static function from(
         ReflectionClassConstant|ReflectionProperty|ReflectionMethod $memberReflection,
-        string $requiredBy,
+        string                                                      $requiredBy,
     ): null|AbstractMember {
         $phpDocComment = $memberReflection->getDocComment();
 
@@ -67,7 +67,7 @@ final readonly class AbstractMember
         $name = $memberReflection->getName();
 
         if (! $name) {
-            throw new ShouldNotHappenException();
+            throw new ShouldNotHappenException;
         }
 
         return new self($phpDocComment, $requiredBy, $declaredBy, $member, $name, $member . '~' . $name);

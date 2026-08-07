@@ -34,7 +34,7 @@ final class InterfaceRequiresMemberRule implements Rule
      * @throws ShouldNotHappenException
      */
     public function processNode(
-        Node $node,
+        Node  $node,
         Scope $scope,
     ): array {
         if (! $node instanceof Interface_) {
@@ -63,7 +63,7 @@ final class InterfaceRequiresMemberRule implements Rule
 
             if ($member->notDeclared()) {
                 $this->error(
-                    message: "Missing {$definition}.",
+                    message   : "Missing {$definition}.",
                     identifier: 'requiresMember.notFound',
                 )->tip(
                     $requiredBy,

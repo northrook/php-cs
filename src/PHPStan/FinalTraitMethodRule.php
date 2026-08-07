@@ -25,7 +25,7 @@ final class FinalTraitMethodRule implements Rule
      */
     public function __construct(
         private readonly ReflectionProvider $reflectionProvider,
-        private readonly array $testDirectories = ['tests'],
+        private readonly array              $testDirectories = ['tests'],
     ) {}
 
     /**
@@ -34,7 +34,7 @@ final class FinalTraitMethodRule implements Rule
      * @throws ShouldNotHappenException
      */
     public function processNode(
-        Node $node,
+        Node  $node,
         Scope $scope,
     ): array {
         if (! $node instanceof Class_ && ! $node instanceof Trait_ && ! $node instanceof Enum_) {
@@ -73,7 +73,7 @@ final class FinalTraitMethodRule implements Rule
 
             $this
                 ->error(
-                    message: "Method {$method} overrides final method sealed by trait {$sealedBy}.",
+                    message   : "Method {$method} overrides final method sealed by trait {$sealedBy}.",
                     identifier: 'finalTraitMethod.overridden',
                 )
                 ->line($classMethod->getStartLine())

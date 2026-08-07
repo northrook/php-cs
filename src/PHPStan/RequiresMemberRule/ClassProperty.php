@@ -22,12 +22,12 @@ final class ClassProperty extends RequiredMember
      * @throws ShouldNotHappenException
      */
     public static function fromPropertyTag(
-        string $name,
+        string      $name,
         PropertyTag $tag,
-        string $requiredByType,
-        string $requiredByClass,
+        string      $requiredByType,
+        string      $requiredByClass,
     ): self {
-        $member            = new self();
+        $member            = new self;
         $member->name      = $name;
         $member->modifiers = [];
         $type              = $tag->getReadableType() ?? $tag->getWritableType();

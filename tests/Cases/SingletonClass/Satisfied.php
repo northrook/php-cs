@@ -17,6 +17,6 @@ class Satisfied implements SingletonInterface
 
     public static function get(): static
     {
-        return self::$instance ??= new self();
+        return self::$instance ??= new self;
     }
 }

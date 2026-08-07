@@ -36,7 +36,7 @@ final class SingletonClassRule implements Rule
      * @throws ShouldNotHappenException
      */
     public function processNode(
-        Node $node,
+        Node  $node,
         Scope $scope,
     ): array {
         if (! $node instanceof Class_ || $node->isAnonymous()) {
@@ -55,7 +55,7 @@ final class SingletonClassRule implements Rule
         }
 
         $this->error(
-            message: "Class {$className} is @singleton but does not implement " . self::INTERFACE . '.',
+            message   : "Class {$className} is @singleton but does not implement " . self::INTERFACE . '.',
             identifier: 'singleton.missingInterface',
         )->tip('Extend Northrook\\Contracts\\Singleton or implement the interface directly.');
 

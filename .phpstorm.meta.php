@@ -8,5 +8,6 @@ namespace PHPSTORM_META {
         '@abstract'  => '@abstract',
         '@static'    => '@static',
         '@singleton' => '@singleton',
+        '@disallows' => '@disallows',
     ]));
 }

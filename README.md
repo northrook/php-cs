@@ -5,7 +5,7 @@ Shared formatting and static analysis configuration.
 This package provides:
 
 - **[dPrint](https://dprint.dev/)** formatting via a shared `dprint.json`
-- **[PHPStan](https://phpstan.org/)** at level `9`, with custom rules for native PHPDoc member contracts (`@method`, `@property`, `@const`), `@abstract`, `@static`, `@singleton`, and sealed trait methods
+- **[PHPStan](https://phpstan.org/)** at level `9`, with custom rules for native PHPDoc member contracts (`@method`, `@property`, `@const`), `@abstract`, `@static`, `@singleton`, `@disallows`, and sealed trait methods
 
 The conventions here prioritize ergonomics over PSR alignment.
 
@@ -186,6 +186,27 @@ final class Debug extends Singleton
 
 Reported with the `singleton.missingInterface` identifier.
 
+### `@disallows` tag
+
+Mark methods that the annotated type — and every consumer — must not end up with. Useful when declaring a method would change engine behaviour (e.g. `__toString()` → `Stringable`) or when a façade must not expose certain entry points.
+
+```php
+/**
+ * @disallows __clone(), __toString(), static get()
+ */
+class Redactor
+{
+    // no stubs — consumers must not introduce these either
+}
+```
+
+- Applies to classes, interfaces, and traits (enums when they compose a tagged type).
+- Specs are comma-separated; `static` is part of the identity (`static get()` ≠ instance `get()`); `()` is optional.
+- Collected from self, parents, interfaces, and traits — including nested traits and traits used by parents.
+- Errors if the analysed type has the method via any inheritance path (own body, parent, trait, or interface).
+
+Reported with the `disallows.methodPresent` identifier.
+
 ### Sealed trait methods
 
 Errors when a class, trait, or enum body redeclares a `final` method sealed by a trait — including traits used by parents and nested traits.
@@ -231,7 +252,7 @@ Set `testDirectories` to an empty list to enforce the seal everywhere.
 
 The package ships `.phpstorm.meta.php`.
 
-PhpStorm recognizes `@const`, `@abstract`, `@static`, and `@singleton` in docblocks (in addition to the built-in `@method` and `@property` support).
+PhpStorm recognizes `@const`, `@abstract`, `@static`, `@singleton`, and `@disallows` in docblocks (in addition to the built-in `@method` and `@property` support).
 
 ## Validation
 

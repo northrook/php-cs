@@ -18,7 +18,7 @@ abstract class PHPStanRuleTest extends RuleTestCase
      */
     final protected function expect(
         string $fixture,
-        array $errors,
+        array  $errors,
     ): void {
         $this->analyse([$fixture], $errors);
     }
