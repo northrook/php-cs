@@ -2,10 +2,14 @@ parameters:
 	phpVersion: 80500
 	level: 9
 	treatPhpDocTypesAsCertain: false
+	reportUnmatchedIgnoredErrors: false
 	finalTraitMethod:
 		testDirectories:
 			- tests
-	reportUnmatchedIgnoredErrors: false
+	disallowedFunctionCalls:
+        -
+            function: 'var_export()'
+            message: 'Use Serializer/Snapshot/VarExporter; native var_export leaks object props.'
 	ignoreErrors:
 		-
 		    # Static analysis != runtime, allow for runtime validation
