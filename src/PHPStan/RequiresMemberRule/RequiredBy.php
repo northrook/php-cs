@@ -45,7 +45,7 @@ final readonly class RequiredBy implements Stringable
             throw new ShouldNotHappenException(
                 message: __CLASS__
                 . ' $type must be one of `Class|Interface|Trait`, '
-                . \var_export($type, true)
+                . \json_encode($type, \JSON_THROW_ON_ERROR)
                 . ' provided.',
             );
         }
@@ -59,7 +59,7 @@ final readonly class RequiredBy implements Stringable
             throw new ShouldNotHappenException(
                 message: __CLASS__
                 . ' $className must be a valid class name, '
-                . \var_export($className, true)
+                . \json_encode($className, \JSON_THROW_ON_ERROR)
                 . ' provided.',
             );
         }

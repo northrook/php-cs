@@ -7,16 +7,16 @@ parameters:
 		testDirectories:
 			- tests
 	disallowedFunctionCalls:
-        -
-            function: 'var_export()'
-            message: 'Use Serializer/Snapshot/VarExporter; native var_export leaks object props.'
+		-
+			function: 'var_export()'
+			message: 'Use Serializer/Snapshot/VarExporter; native var_export leaks object props.'
 	ignoreErrors:
 		-
-		    # Static analysis != runtime, allow for runtime validation
+			# Static analysis != runtime, allow for runtime validation
 			message: '# will always evaluate to #'
 			path: *.php
 		-
-		    # Defensive catches are not always dead at runtime
+			# Defensive catches are not always dead at runtime
 			message: '#Dead catch #'
 			path: *.php
 		-
@@ -28,6 +28,10 @@ parametersSchema:
 	finalTraitMethod: structure([
 		testDirectories: listOf(string())
 	])
+	disallowedFunctionCalls: listOf(structure([
+		function: string()
+		?message: string()
+	]))
 
 rules:
 	- Northrook\PHPStan\ClassRequiresMemberRule
@@ -42,5 +46,11 @@ services:
 		class: Northrook\PHPStan\FinalTraitMethodRule
 		arguments:
 			testDirectories: %finalTraitMethod.testDirectories%
+		tags:
+			- phpstan.rules.rule
+	-
+		class: Northrook\PHPStan\DisallowedFunctionCallsRule
+		arguments:
+			disallowedFunctions: %disallowedFunctionCalls%
 		tags:
 			- phpstan.rules.rule

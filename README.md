@@ -5,7 +5,7 @@ Shared formatting and static analysis configuration.
 This package provides:
 
 - **[dPrint](https://dprint.dev/)** formatting via a shared `dprint.json`
-- **[PHPStan](https://phpstan.org/)** at level `9`, with custom rules for native PHPDoc member contracts (`@method`, `@property`, `@const`), `@abstract`, `@static`, `@singleton`, `@disallows`, and sealed trait methods
+- **[PHPStan](https://phpstan.org/)** at level `9`, with custom rules for native PHPDoc member contracts (`@method`, `@property`, `@const`), `@abstract`, `@static`, `@singleton`, `@disallows`, sealed trait methods, and configurable disallowed function calls
 
 The conventions here prioritize ergonomics over PSR alignment.
 
@@ -252,6 +252,33 @@ parameters:
 ```
 
 Set `testDirectories` to an empty list to enforce the seal everywhere.
+
+### Disallowed function calls
+
+Errors when calling a function listed in `disallowedFunctionCalls`. Names are absolute (`var_export` ⇒ `\var_export`, `Northrook\Contracts\foo` ⇒ `\Northrook\Contracts\foo`). Trailing `()` and a leading `\` are optional in config.
+
+Optional `message` is shown as a tip; defaults to `{function}() is disallowed.`
+
+```neon
+parameters:
+	disallowedFunctionCalls:
+		-
+			function: 'var_export()'
+			message: 'Use Serializer/Snapshot/VarExporter; native var_export leaks object props.'
+```
+
+```php
+final class Broken
+{
+    public function run(mixed $value): string
+    {
+        // disallowedFunctionCalls.varExport
+        return \var_export($value, true);
+    }
+}
+```
+
+Dynamic calls (`$fn()`), method calls, and static method calls are not checked. A namespaced function that shares a banned global's name is not flagged.
 
 ## PhpStorm
 

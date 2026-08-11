@@ -124,7 +124,7 @@ final readonly class MemberDefinition
                 'object' => $value instanceof Stringable ? $value->__toString() : \get_class($value),
                 default                       => throw new ShouldNotHappenException(
                     self::class . ' was provided an unexpected value at key `' . $key . '`. in '
-                        . \var_export($array, true),
+                        . \json_encode($array, \JSON_THROW_ON_ERROR),
                 ),
             };
 
