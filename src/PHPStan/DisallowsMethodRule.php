@@ -36,12 +36,7 @@ final class DisallowsMethodRule implements Rule
         Node  $node,
         Scope $scope,
     ): array {
-        if (
-            ! $node instanceof Class_
-            && ! $node instanceof Interface_
-            && ! $node instanceof Trait_
-            && ! $node instanceof Enum_
-        ) {
+        if (! $node instanceof Class_ && ! $node instanceof Interface_ && ! $node instanceof Trait_ && ! $node instanceof Enum_) {
             return [];
         }
 

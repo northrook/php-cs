@@ -8,7 +8,7 @@ use Northrook\PHPStan\Internal\{ErrorHandler, NodeResolver};
 use PhpParser\Node;
 use PhpParser\Node\Stmt\{Class_, ClassLike, Enum_, Trait_};
 use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Reflection\{ClassReflection, ReflectionProvider};
 use PHPStan\Rules\{Rule, RuleError};
 use PHPStan\ShouldNotHappenException;
 
@@ -87,7 +87,7 @@ final class FinalTraitMethodRule implements Rule
      * @return array<string, string> lowercased method name => declaring trait
      */
     private function finalTraitMethods(
-        \PHPStan\Reflection\ClassReflection $reflection,
+        ClassReflection $reflection,
     ): array {
         $finalTraitMethods = [];
 

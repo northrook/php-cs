@@ -8,7 +8,7 @@ use Northrook\PHPStan\Internal\{ErrorHandler, NodeResolver};
 use Northrook\PHPStan\RequiresMemberRule\{RequiredMember, RequiredMemberCollector};
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use PHPStan\Analyser\{Scope};
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\{ClassReflection, ReflectionProvider};
 use PHPStan\Rules\{Rule, RuleError};
 use PHPStan\ShouldNotHappenException;
@@ -31,10 +31,7 @@ final class ClassRequiresMemberRule implements Rule
     ) {}
 
     /**
-     * @param Node   $node
-     * @param Scope  $scope
-     *
-     * @return array<array-key,RuleError>
+     * @return array<array-key, RuleError>
      * @throws ShouldNotHappenException
      */
     public function processNode(
@@ -47,9 +44,7 @@ final class ClassRequiresMemberRule implements Rule
 
         foreach ($this->requiredMembers() as $member) {
             $member->reflect($this->reflection, $scope);
-            $memberName = $member->name(
-                $this->className,
-            );
+            $memberName = $member->name($this->className);
             $definition = $member->label . ' ' . $memberName;
             $requiredBy = $member->label . ' required by ' . $member->requiredBy . '.';
 
@@ -57,9 +52,7 @@ final class ClassRequiresMemberRule implements Rule
                 $this->error(
                     message   : "Missing {$definition}.",
                     identifier: 'requiresMember.notFound',
-                )->tip(
-                    $requiredBy,
-                );
+                )->tip($requiredBy);
 
                 continue;
             }
@@ -169,9 +162,6 @@ final class ClassRequiresMemberRule implements Rule
     }
 
     /**
-     * @param Node  $node
-     *
-     * @return bool
      * @throws ShouldNotHappenException
      */
     private function skipInvalidNode(
@@ -187,7 +177,7 @@ final class ClassRequiresMemberRule implements Rule
         return false;
     }
 
-    final public function getNodeType(): string
+    public function getNodeType(): string
     {
         return Class_::class;
     }

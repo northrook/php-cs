@@ -10,6 +10,7 @@ parameters:
 		-
 			function: 'var_export()'
 			message: 'Use Serializer/Snapshot/VarExporter; native var_export leaks object props.'
+			exceptIn: '\Northrook\Contracts\Exportable'
 	ignoreErrors:
 		-
 			# Static analysis != runtime, allow for runtime validation
@@ -31,6 +32,7 @@ parametersSchema:
 	disallowedFunctionCalls: listOf(structure([
 		function: string()
 		?message: string()
+		?exceptIn: anyOf(string(), listOf(string()))
 	]))
 
 rules:

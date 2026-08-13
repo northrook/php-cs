@@ -14,6 +14,8 @@ use PHPStan\ShouldNotHappenException;
  */
 final class RequiredMemberCollector
 {
+    private function __construct() {}
+
     /**
      * @return array<string, RequiredMember>
      * @throws ShouldNotHappenException

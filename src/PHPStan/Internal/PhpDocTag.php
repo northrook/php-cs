@@ -11,8 +11,9 @@ use PHPStan\Reflection\ClassReflection;
  */
 final class PhpDocTag
 {
+    private function __construct() {}
+
     /**
-     * @param string  $phpDocComment
      * @param string  $tag  e.g. `@static`
      */
     public static function has(
@@ -39,5 +40,35 @@ final class PhpDocTag
         $phpDocComment = $reflection->getNativeReflection()->getDocComment();
 
         return $phpDocComment !== false && self::has($phpDocComment, $tag);
+    }
+
+    /**
+     * Label of the type that imposes `$tag` on `$reflection` via self, parents, or traits.
+     *
+     * @return null|non-empty-string
+     */
+    public static function imposedBy(
+        ClassReflection $reflection,
+        string          $tag,
+    ): null|string {
+        if (self::classHas($reflection, $tag)) {
+            return ClassLabel::of($reflection);
+        }
+
+        foreach ($reflection->getParents() as $parent) {
+            if (self::classHas($parent, $tag)) {
+                return ClassLabel::of($parent);
+            }
+        }
+
+        foreach ([$reflection, ...$reflection->getParents()] as $type) {
+            foreach ($type->getTraits(true) as $trait) {
+                if (self::classHas($trait, $tag)) {
+                    return ClassLabel::of($trait);
+                }
+            }
+        }
+
+        return null;
     }
 }

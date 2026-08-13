@@ -14,11 +14,8 @@ use PHPStan\ShouldNotHappenException;
 trait NodeResolver
 {
     /**
-     * @param Node $from
-     *
      * @return class-string
      * @throws ShouldNotHappenException
-     * @final
      */
     final protected function resolveName(
         Node $from,
@@ -27,13 +24,7 @@ trait NodeResolver
 
         if ($nodeName === null) {
             throw new ShouldNotHappenException(
-                message: 'The '
-                . $from::class
-                . ' does somehow not have a '
-                . Name::class
-                . ' or '
-                . Node\Identifier::class
-                . '.',
+                message: 'The ' . $from::class . ' does somehow not have a ' . Name::class . ' or ' . Node\Identifier::class . '.',
             );
         }
 

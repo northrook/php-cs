@@ -9,10 +9,6 @@ use ReflectionClassConstant;
 
 final class ClassConstant extends RequiredMember
 {
-    protected const array MODIFIERS = [
-        'final' => true,
-    ];
-
     private null|ReflectionClassConstant $reflection = null;
 
     /**
@@ -69,7 +65,6 @@ final class ClassConstant extends RequiredMember
 
     protected function getReflection(): ReflectionClassConstant
     {
-        return $this->reflection ??= $this->classReflection->getReflectionConstant($this->name)
-        ?: throw new ShouldNotHappenException;
+        return $this->reflection ??= $this->classReflection->getReflectionConstant($this->name) ?: throw new ShouldNotHappenException;
     }
 }

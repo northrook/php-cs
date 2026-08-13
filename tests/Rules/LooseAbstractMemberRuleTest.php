@@ -16,21 +16,9 @@ final class LooseAbstractMemberRuleTest extends PHPStanRuleTest
     public function testReportsMissingAbstractMembersOnConcreteClass(): void
     {
         $this->expect(__DIR__ . '/../Cases/LooseAbstractMember/MissingMembers.php', [
-            [
-                'Missing Constant Tests\Cases\LooseAbstractMember\MissingMembers::LABEL.',
-                7,
-                'abstract class Tests\Cases\LooseAbstractMember\AbstractBase',
-            ],
-            [
-                'Missing Property Tests\Cases\LooseAbstractMember\MissingMembers->name.',
-                7,
-                'abstract class Tests\Cases\LooseAbstractMember\AbstractBase',
-            ],
-            [
-                'Missing Method Tests\Cases\LooseAbstractMember\MissingMembers->label.',
-                7,
-                'abstract class Tests\Cases\LooseAbstractMember\AbstractBase',
-            ],
+            ['Missing Constant Tests\Cases\LooseAbstractMember\MissingMembers::LABEL.', 7, 'abstract class Tests\Cases\LooseAbstractMember\AbstractBase'],
+            ['Missing Property Tests\Cases\LooseAbstractMember\MissingMembers->name.',  7, 'abstract class Tests\Cases\LooseAbstractMember\AbstractBase'],
+            ['Missing Method Tests\Cases\LooseAbstractMember\MissingMembers->label.',   7, 'abstract class Tests\Cases\LooseAbstractMember\AbstractBase'],
         ]);
     }
 
@@ -42,21 +30,9 @@ final class LooseAbstractMemberRuleTest extends PHPStanRuleTest
     public function testReportsMissingAbstractMembersOnAbstractIntermediateClass(): void
     {
         $this->expect(__DIR__ . '/../Cases/LooseAbstractMember/AbstractIntermediate.php', [
-            [
-                'Missing Constant Tests\Cases\LooseAbstractMember\AbstractIntermediate::LABEL.',
-                7,
-                'abstract class Tests\Cases\LooseAbstractMember\AbstractBase',
-            ],
-            [
-                'Missing Property Tests\Cases\LooseAbstractMember\AbstractIntermediate->name.',
-                7,
-                'abstract class Tests\Cases\LooseAbstractMember\AbstractBase',
-            ],
-            [
-                'Missing Method Tests\Cases\LooseAbstractMember\AbstractIntermediate->label.',
-                7,
-                'abstract class Tests\Cases\LooseAbstractMember\AbstractBase',
-            ],
+            ['Missing Constant Tests\Cases\LooseAbstractMember\AbstractIntermediate::LABEL.', 7, 'abstract class Tests\Cases\LooseAbstractMember\AbstractBase'],
+            ['Missing Property Tests\Cases\LooseAbstractMember\AbstractIntermediate->name.',  7, 'abstract class Tests\Cases\LooseAbstractMember\AbstractBase'],
+            ['Missing Method Tests\Cases\LooseAbstractMember\AbstractIntermediate->label.',   7, 'abstract class Tests\Cases\LooseAbstractMember\AbstractBase'],
         ]);
     }
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Cases\DisallowedFunctionCalls;
 
-final class Disallowed
+final class AllowedInExportable implements Exportable
 {
     public function run(
         mixed $value,

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Northrook\PHPStan\DisallowsRule;
 
+use Northrook\PHPStan\Internal\ClassLabel;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\Reflection\ClassReflection;
@@ -13,6 +14,8 @@ use PHPStan\Reflection\ClassReflection;
  */
 final class DisallowedMethodCollector
 {
+    private function __construct() {}
+
     /**
      * @return array<string, DisallowedMethod>
      */
@@ -25,8 +28,7 @@ final class DisallowedMethodCollector
             return [];
         }
 
-        $sourceLabel = self::label($source);
-        $sourceClass = $source->getName();
+        $sourceLabel = ClassLabel::of($source);
         $methods     = [];
 
         foreach ($resolved->getPhpDocNodes() as $phpDocNode) {
@@ -41,7 +43,7 @@ final class DisallowedMethodCollector
                     continue;
                 }
 
-                foreach (self::parse($value->value, $sourceLabel, $sourceClass) as $method) {
+                foreach (self::parse($value->value, $sourceLabel) as $method) {
                     $methods[$method->key()] = $method;
                 }
             }
@@ -52,14 +54,12 @@ final class DisallowedMethodCollector
 
     /**
      * @param non-empty-string  $sourceLabel
-     * @param class-string      $sourceClass
      *
      * @return list<DisallowedMethod>
      */
     private static function parse(
         string $value,
         string $sourceLabel,
-        string $sourceClass,
     ): array {
         $value = \trim($value);
 
@@ -86,41 +86,13 @@ final class DisallowedMethodCollector
                 continue;
             }
 
-            $name = $matches[2];
-
             $methods[] = new DisallowedMethod(
-                name       : $name,
+                name       : $matches[2],
                 isStatic   : $matches[1] === 'static',
                 sourceLabel: $sourceLabel,
-                sourceClass: $sourceClass,
             );
         }
 
         return $methods;
-    }
-
-    /**
-     * @return non-empty-string
-     */
-    private static function label(
-        ClassReflection $reflection,
-    ): string {
-        if ($reflection->isTrait()) {
-            return 'trait ' . $reflection->getName();
-        }
-
-        if ($reflection->isInterface()) {
-            return 'interface ' . $reflection->getName();
-        }
-
-        if ($reflection->isEnum()) {
-            return 'enum ' . $reflection->getName();
-        }
-
-        if ($reflection->isAbstract()) {
-            return 'abstract class ' . $reflection->getName();
-        }
-
-        return 'class ' . $reflection->getName();
     }
 }

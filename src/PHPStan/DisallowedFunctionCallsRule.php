@@ -16,6 +16,8 @@ use PHPStan\ShouldNotHappenException;
  * Reports calls to configured disallowed functions.
  *
  * Configured names are absolute (`var_export` ⇒ `\var_export`).
+ * Optional `exceptIn` skips the error when the call is in a class that is,
+ * extends, or implements that type.
  *
  * @implements Rule<FuncCall>
  */
@@ -23,11 +25,13 @@ final class DisallowedFunctionCallsRule implements Rule
 {
     use ErrorHandler;
 
-    /** @var array<string, null|string> lowercased absolute function name => tip message */
+    /**
+     * @var array<string, array{message: null|string, exceptIn: list<string>}>
+     */
     private readonly array $disallowedFunctions;
 
     /**
-     * @param list<array{function: string, message?: string}>  $disallowedFunctions
+     * @param list<array{function: string, message?: string, exceptIn?: string|list<string>}>  $disallowedFunctions
      */
     public function __construct(
         private readonly ReflectionProvider $reflectionProvider,
@@ -42,7 +46,10 @@ final class DisallowedFunctionCallsRule implements Rule
                 continue;
             }
 
-            $normalized[$name] = $entry['message'] ?? null;
+            $normalized[$name] = [
+                'message'  => $entry['message'] ?? null,
+                'exceptIn' => $this->normalizeExceptIn($entry['exceptIn'] ?? []),
+            ];
         }
 
         $this->disallowedFunctions = $normalized;
@@ -62,20 +69,19 @@ final class DisallowedFunctionCallsRule implements Rule
         }
 
         $absolute = $this->absoluteFunctionName($node->name, $scope);
+        $rule     = $absolute === null ? null : $this->disallowedFunctions[\strtolower($absolute)] ?? null;
 
-        if ($absolute === null || ! \array_key_exists(\strtolower($absolute), $this->disallowedFunctions)) {
+        if ($absolute === null || $rule === null || $this->isExempt($scope, $rule['exceptIn'])) {
             return [];
         }
 
         $function = $absolute . '()';
-        $tip      = $this->disallowedFunctions[\strtolower($absolute)] ?? "{$function} is disallowed.";
+        $tip      = $rule['message'] ?? "{$function} is disallowed.";
 
-        $this
-            ->error(
-                message   : "Call to function {$function} is disallowed.",
-                identifier: 'disallowedFunctionCalls.' . $this->identifierSuffix($absolute),
-            )
-            ->tip($tip);
+        $this->error(
+            message   : "Call to function {$function} is disallowed.",
+            identifier: 'disallowedFunctionCalls.' . $this->identifierSuffix($absolute),
+        )->tip($tip);
 
         return $this->errors();
     }
@@ -86,7 +92,7 @@ final class DisallowedFunctionCallsRule implements Rule
     private function absoluteFunctionName(
         Name  $name,
         Scope $scope,
-    ): ?string {
+    ): null|string {
         if ($this->reflectionProvider->hasFunction($name, $scope)) {
             return $this->reflectionProvider->getFunction($name, $scope)->getName();
         }
@@ -97,6 +103,53 @@ final class DisallowedFunctionCallsRule implements Rule
         }
 
         return null;
+    }
+
+    /**
+     * @param string|list<string>  $exceptIn
+     *
+     * @return list<string>
+     */
+    private function normalizeExceptIn(
+        string|array $exceptIn,
+    ): array {
+        if (\is_string($exceptIn)) {
+            $exceptIn = [$exceptIn];
+        }
+
+        $normalized = [];
+
+        foreach ($exceptIn as $type) {
+            $type = \trim($type, "\\ \t\n\r\0\x0B");
+
+            if ($type !== '') {
+                $normalized[] = $type;
+            }
+        }
+
+        return $normalized;
+    }
+
+    /**
+     * @param list<string>  $exceptIn
+     */
+    private function isExempt(
+        Scope $scope,
+        array $exceptIn,
+    ): bool {
+        $class = $scope->getClassReflection();
+
+        if ($exceptIn === [] || $class === null) {
+            return false;
+        }
+
+        foreach ($exceptIn as $type) {
+            if ($class->is($type)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function identifierSuffix(

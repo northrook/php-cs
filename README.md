@@ -259,12 +259,15 @@ Errors when calling a function listed in `disallowedFunctionCalls`. Names are ab
 
 Optional `message` is shown as a tip; defaults to `{function}() is disallowed.`
 
+Optional `exceptIn` (string or list of class/interface names) skips the error when the call is in a class that is, extends, or implements that type. Trait methods follow the using class.
+
 ```neon
 parameters:
 	disallowedFunctionCalls:
 		-
 			function: 'var_export()'
 			message: 'Use Serializer/Snapshot/VarExporter; native var_export leaks object props.'
+			exceptIn: '\Northrook\Contracts\Exportable'
 ```
 
 ```php
@@ -273,6 +276,14 @@ final class Broken
     public function run(mixed $value): string
     {
         // disallowedFunctionCalls.varExport
+        return \var_export($value, true);
+    }
+}
+
+final class Snapshot implements \Northrook\Contracts\Exportable
+{
+    public function export(mixed $value): string
+    {
         return \var_export($value, true);
     }
 }

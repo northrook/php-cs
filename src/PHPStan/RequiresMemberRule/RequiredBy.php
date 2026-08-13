@@ -29,24 +29,15 @@ final readonly class RequiredBy implements Stringable
     }
 
     /**
-     * @internal
-     *
-     * @param string  $type
-     * @param string  $className
-     *
-     * @return RequiredBy
      * @throws ShouldNotHappenException
      */
     public static function from(
         string $type,
         string $className,
     ): RequiredBy {
-        if (false === ( $type === 'Class' || $type === 'Interface' || $type === 'Trait' )) {
+        if ($type !== 'Class' && $type !== 'Interface' && $type !== 'Trait') {
             throw new ShouldNotHappenException(
-                message: __CLASS__
-                . ' $type must be one of `Class|Interface|Trait`, '
-                . \json_encode($type, \JSON_THROW_ON_ERROR)
-                . ' provided.',
+                message: __CLASS__ . ' $type must be one of `Class|Interface|Trait`, ' . \json_encode($type, \JSON_THROW_ON_ERROR) . ' provided.',
             );
         }
 
@@ -57,10 +48,7 @@ final readonly class RequiredBy implements Stringable
             ) !== 1
         ) {
             throw new ShouldNotHappenException(
-                message: __CLASS__
-                . ' $className must be a valid class name, '
-                . \json_encode($className, \JSON_THROW_ON_ERROR)
-                . ' provided.',
+                message: __CLASS__ . ' $className must be a valid class name, ' . \json_encode($className, \JSON_THROW_ON_ERROR) . ' provided.',
             );
         }
 

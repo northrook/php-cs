@@ -20,7 +20,8 @@ use Stringable;
  */
 abstract class RequiredMember implements Stringable
 {
-    private const array REMOVE_WHITESPACE = [
+    /** Strip whitespace and PHPDoc `*` so native ↔ PHPDoc type tokens compare. */
+    private const array NORMALIZE_TYPE = [
         ' '    => '',
         "\t"   => '',
         "\n"   => '',
@@ -158,9 +159,9 @@ abstract class RequiredMember implements Stringable
     }
 
     public function name(
-        false|string $className = false,
+        null|string $className = null,
     ): string {
-        if ($className === false) {
+        if ($className === null) {
             return $this->name;
         }
 
@@ -182,7 +183,7 @@ abstract class RequiredMember implements Stringable
         }
 
         $resolveFrom = \str_replace('?', 'null|', $resolveFrom);
-        $resolveFrom = \strtr($resolveFrom, self::REMOVE_WHITESPACE);
+        $resolveFrom = \strtr($resolveFrom, self::NORMALIZE_TYPE);
 
         // TODO: [low] Allow for double-pipe OR `||` to mean any one of
         $types = [];
@@ -203,8 +204,6 @@ abstract class RequiredMember implements Stringable
      *
      * PHPStan `typeOnly` describe wraps callables as `(callable)`; native reflection
      * yields `callable`. Generics like `array<mixed>` must compare as `array`.
-     *
-     * @return string
      */
     private static function normalizeTypeToken(
         string $type,

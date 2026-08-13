@@ -4,16 +4,13 @@ declare(strict_types=1);
 
 namespace Northrook\PHPStan;
 
-use Northrook\PHPStan\Internal\ErrorHandler;
-use Northrook\PHPStan\Internal\NodeResolver;
-use Northrook\PHPStan\RequiresMemberRule\ClassConstant;
-use Northrook\PHPStan\RequiresMemberRule\RequiredMemberCollector;
+use Northrook\PHPStan\Internal\{ErrorHandler, NodeResolver};
+use Northrook\PHPStan\RequiresMemberRule\{ClassConstant, RequiredMemberCollector};
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Interface_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Rules\Rule;
-use PHPStan\Rules\RuleError;
+use PHPStan\Rules\{Rule, RuleError};
 use PHPStan\ShouldNotHappenException;
 
 /**
@@ -57,17 +54,14 @@ final class InterfaceRequiresMemberRule implements Rule
             }
 
             $member->reflect($reflection, $scope);
-            $memberName = $member->name($className);
-            $definition = $member->label . ' ' . $memberName;
+            $definition = $member->label . ' ' . $member->name($className);
             $requiredBy = $member->label . ' required by ' . $member->requiredBy . '.';
 
             if ($member->notDeclared()) {
                 $this->error(
                     message   : "Missing {$definition}.",
                     identifier: 'requiresMember.notFound',
-                )->tip(
-                    $requiredBy,
-                );
+                )->tip($requiredBy);
             }
         }
 

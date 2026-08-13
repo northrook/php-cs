@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Northrook\PHPStan;
 
-use Northrook\PHPStan\Internal\{ErrorHandler, NodeResolver};
+use Northrook\PHPStan\Internal\{ClassLabel, ErrorHandler, NodeResolver};
 use Northrook\PHPStan\MemberRules\AbstractMember;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
@@ -20,11 +20,6 @@ final class LooseAbstractMemberRule implements Rule
 {
     use ErrorHandler;
     use NodeResolver;
-
-    /** @var class-string */
-    private string $className;
-
-    private ClassReflection $reflection;
 
     public function __construct(
         private readonly ReflectionProvider $reflectionProvider,
@@ -45,19 +40,16 @@ final class LooseAbstractMemberRule implements Rule
             return [];
         }
 
-        $this->className  = $this->resolveName($node);
-        $this->reflection = $this->reflectionProvider->getClass($this->className);
+        $className  = $this->resolveName($node);
+        $reflection = $this->reflectionProvider->getClass($className);
 
-        foreach ($this->requiredMembers($scope) as $member) {
+        foreach ($this->requiredMembers($reflection, $className, $scope) as $member) {
             if ($member === false) {
                 continue;
             }
 
-            $memberName = $member->name($this->className);
-            $definition = $member->definition . ' ' . $memberName;
-
             $this->error(
-                message   : "Missing {$definition}.",
+                message   : 'Missing ' . $member->definition . ' ' . $member->name($className) . '.',
                 identifier: 'abstractMember.notFound',
             )->tip($member->requiredBy);
         }
@@ -66,6 +58,8 @@ final class LooseAbstractMemberRule implements Rule
     }
 
     /**
+     * @param class-string  $className
+     *
      * @return array<string, false|AbstractMember>
      *
      * @throws ShouldNotHappenException
@@ -73,29 +67,31 @@ final class LooseAbstractMemberRule implements Rule
      * @throws \PHPStan\Reflection\MissingMethodFromReflectionException
      */
     private function requiredMembers(
-        Scope $scope,
+        ClassReflection $reflection,
+        string          $className,
+        Scope           $scope,
     ): array {
         $requiredMembers = [];
+        $sources         = [...$reflection->getParents()];
 
-        foreach ([
-            ...$this->reflection->getParents(),
-            ...$this->reflection->getTraits(),
-        ] as $node) {
-            $requiredBy = $this->getNodeLabel($node);
-            $reflection = $node->getNativeReflection();
+        foreach ([$reflection, ...$reflection->getParents()] as $type) {
+            foreach ($type->getTraits(true) as $trait) {
+                $sources[] = $trait;
+            }
+        }
 
-            foreach ($reflection->getReflectionConstants() as $reflectionConstant) {
+        foreach ($sources as $source) {
+            $requiredBy       = ClassLabel::of($source);
+            $nativeReflection = $source->getNativeReflection();
+
+            foreach ($nativeReflection->getReflectionConstants() as $reflectionConstant) {
                 $constant = AbstractMember::from($reflectionConstant, $requiredBy);
 
                 if (! $constant) {
                     continue;
                 }
 
-                if (
-                    $this->reflection->hasConstant($constant->name)
-                    && $this->reflection->getConstant($constant->name)->getDeclaringClass()->getName()
-                        === $this->className
-                ) {
+                if ($reflection->hasConstant($constant->name) && $reflection->getConstant($constant->name)->getDeclaringClass()->getName() === $className) {
                     $requiredMembers[$constant->key] ??= false;
 
                     continue;
@@ -104,18 +100,14 @@ final class LooseAbstractMemberRule implements Rule
                 $requiredMembers[$constant->key] ??= $constant;
             }
 
-            foreach ($reflection->getProperties() as $reflectionProperty) {
+            foreach ($nativeReflection->getProperties() as $reflectionProperty) {
                 $property = AbstractMember::from($reflectionProperty, $requiredBy);
 
                 if (! $property) {
                     continue;
                 }
 
-                if (
-                    $this->reflection->hasProperty($property->name)
-                    && $this->reflection->getProperty($property->name, $scope)->getDeclaringClass()->getName()
-                        === $this->className
-                ) {
+                if ($reflection->hasProperty($property->name) && $reflection->getProperty($property->name, $scope)->getDeclaringClass()->getName() === $className) {
                     $requiredMembers[$property->key] ??= false;
 
                     continue;
@@ -124,18 +116,14 @@ final class LooseAbstractMemberRule implements Rule
                 $requiredMembers[$property->key] ??= $property;
             }
 
-            foreach ($reflection->getMethods() as $reflectionMethod) {
+            foreach ($nativeReflection->getMethods() as $reflectionMethod) {
                 $method = AbstractMember::from($reflectionMethod, $requiredBy);
 
                 if (! $method) {
                     continue;
                 }
 
-                if (
-                    $this->reflection->hasMethod($method->name)
-                    && $this->reflection->getMethod($method->name, $scope)->getDeclaringClass()->getName()
-                        === $this->className
-                ) {
+                if ($reflection->hasMethod($method->name) && $reflection->getMethod($method->name, $scope)->getDeclaringClass()->getName() === $className) {
                     $requiredMembers[$method->key] ??= false;
 
                     continue;
@@ -146,25 +134,6 @@ final class LooseAbstractMemberRule implements Rule
         }
 
         return $requiredMembers;
-    }
-
-    private function getNodeLabel(
-        ClassReflection $node,
-    ): string {
-        $fragments = [];
-
-        if ($node->isAbstract()) {
-            $fragments[] = 'abstract';
-            $fragments[] = 'class';
-        } elseif ($node->isTrait()) {
-            $fragments[] = 'trait';
-        } else {
-            $fragments[] = 'class';
-        }
-
-        $fragments[] = $node->getName();
-
-        return \implode(' ', $fragments);
     }
 
     public function getNodeType(): string

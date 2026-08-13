@@ -61,16 +61,13 @@ final readonly class MemberDefinition
         array $required,
         array $declared,
     ): null|MemberDefinition {
-        // Bail early
         if ($required === []) {
             return null;
         }
 
-        // Stringify valid values
         $required = self::prepare($required);
         $declared = self::prepare($declared);
 
-        // Compare
         $missing    = \array_diff($required, $declared);
         $unexpected = \array_diff($declared, $required);
 
@@ -121,10 +118,9 @@ final readonly class MemberDefinition
                 'NULL'                        => 'null',
                 'boolean'                     => $value ? 'true' : 'false',
                 'string', 'integer', 'double' => (string) $value,
-                'object' => $value instanceof Stringable ? $value->__toString() : \get_class($value),
+                'object'                      => $value instanceof Stringable ? $value->__toString() : \get_class($value),
                 default                       => throw new ShouldNotHappenException(
-                    self::class . ' was provided an unexpected value at key `' . $key . '`. in '
-                        . \json_encode($array, \JSON_THROW_ON_ERROR),
+                    self::class . ' was provided an unexpected value at key `' . $key . '`. in ' . \json_encode($array, \JSON_THROW_ON_ERROR),
                 ),
             };
 

@@ -6,8 +6,9 @@ namespace Tests\Cases\DisallowedFunctionCalls;
 
 final class NoMessage
 {
-    public function run(mixed $value): string
-    {
+    public function run(
+        mixed $value,
+    ): string {
         return \var_export($value, true);
     }
 }

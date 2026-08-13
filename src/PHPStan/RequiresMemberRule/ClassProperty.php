@@ -11,11 +11,6 @@ use ReflectionProperty;
 
 final class ClassProperty extends RequiredMember
 {
-    protected const array MODIFIERS = [
-        'static'   => true,
-        'readonly' => true,
-    ];
-
     private null|ReflectionProperty $reflection = null;
 
     /**

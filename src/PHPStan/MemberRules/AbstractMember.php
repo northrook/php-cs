@@ -10,29 +10,22 @@ use ReflectionClassConstant;
 use ReflectionMethod;
 use ReflectionProperty;
 
+/**
+ * @internal
+ */
 final readonly class AbstractMember
 {
-    /**
-     * @param string  $phpDocComment
-     * @param string  $requiredBy
-     * @param string  $declaredBy
-     * @param string  $definition
-     * @param string  $name
-     * @param string  $key
-     */
     private function __construct(
-        public string $phpDocComment,
         public string $requiredBy,
-        public string $declaredBy,
         public string $definition,
         public string $name,
         public string $key,
     ) {}
 
     public function name(
-        false|string $className = false,
+        null|string $className = null,
     ): string {
-        if ($className === false) {
+        if ($className === null) {
             return $this->name;
         }
 
@@ -40,11 +33,7 @@ final readonly class AbstractMember
     }
 
     /**
-     * @param ReflectionClassConstant|ReflectionMethod|ReflectionProperty  $memberReflection
-     * @param string                                                       $requiredBy
-     *
-     * @return ?AbstractMember
-     * @throws \PHPStan\ShouldNotHappenException
+     * @throws ShouldNotHappenException
      */
     public static function from(
         ReflectionClassConstant|ReflectionProperty|ReflectionMethod $memberReflection,
@@ -55,8 +44,6 @@ final readonly class AbstractMember
         if ($phpDocComment === false || ! PhpDocTag::has($phpDocComment, '@abstract')) {
             return null;
         }
-
-        $declaredBy = $memberReflection->getDeclaringClass()->getName();
 
         $member = match (true) {
             $memberReflection instanceof ReflectionClassConstant => 'Constant',
@@ -70,6 +57,6 @@ final readonly class AbstractMember
             throw new ShouldNotHappenException;
         }
 
-        return new self($phpDocComment, $requiredBy, $declaredBy, $member, $name, $member . '~' . $name);
+        return new self($requiredBy, $member, $name, $member . '~' . $name);
     }
 }

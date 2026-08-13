@@ -11,12 +11,6 @@ use ReflectionMethod;
 
 final class ClassMethod extends RequiredMember
 {
-    protected const array MODIFIERS = [
-        'final'    => true,
-        'static'   => true,
-        'abstract' => true,
-    ];
-
     private null|ReflectionMethod $reflection = null;
 
     /**

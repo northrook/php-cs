@@ -7,22 +7,19 @@ namespace Northrook\PHPStan\Internal;
 use PHPStan\Rules\{RuleError, RuleErrorBuilder};
 use PHPStan\ShouldNotHappenException;
 
+/**
+ * @internal
+ */
 trait ErrorHandler
 {
     /** @var RuleErrorBuilder<RuleError>[] */
     private array $errors = [];
 
     /**
-     * @param string  $message
-     * @param string  $identifier
-     * @param bool    $ignorable
-     *
      * @return RuleErrorBuilder<RuleError>
-     * @throws \PHPStan\ShouldNotHappenException
-     *
-     * @final
+     * @throws ShouldNotHappenException
      */
-    protected function error(
+    final protected function error(
         string $message,
         string $identifier,
         bool   $ignorable = false,
@@ -39,9 +36,8 @@ trait ErrorHandler
     }
 
     /**
-     * @return array<array-key,RuleError>
+     * @return array<array-key, RuleError>
      * @throws ShouldNotHappenException
-     * @final
      */
     final protected function errors(): array
     {
