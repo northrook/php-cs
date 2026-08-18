@@ -6,10 +6,10 @@ namespace Tests\Rules;
 
 use Northrook\PHPStan\SingletonClassRule;
 use PHPStan\Rules\Rule;
-use Tests\PHPStanRuleTest;
+use Tests\Support\PHPStanRuleTest;
 
 /**
- * @extends PHPStanRuleTest<SingletonClassRule>
+ * @extends \Tests\Support\PHPStanRuleTest<SingletonClassRule>
  */
 final class SingletonClassRuleTest extends PHPStanRuleTest
 {

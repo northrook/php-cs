@@ -42,8 +42,13 @@ rules:
 	- Northrook\PHPStan\StaticClassRule
 	- Northrook\PHPStan\SingletonClassRule
 	- Northrook\PHPStan\DisallowsMethodRule
+	- Northrook\PHPStan\InitializerRule
 
 services:
+	-
+		class: Northrook\PHPStan\TaggedAdditionalConstructorsExtension
+		tags:
+			- phpstan.additionalConstructorsExtension
 	-
 		class: Northrook\PHPStan\FinalTraitMethodRule
 		arguments:

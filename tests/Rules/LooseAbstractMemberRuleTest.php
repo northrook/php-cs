@@ -6,10 +6,10 @@ namespace Tests\Rules;
 
 use Northrook\PHPStan\LooseAbstractMemberRule;
 use PHPStan\Rules\Rule;
-use Tests\PHPStanRuleTest;
+use Tests\Support\PHPStanRuleTest;
 
 /**
- * @extends PHPStanRuleTest<LooseAbstractMemberRule>
+ * @extends \Tests\Support\PHPStanRuleTest<LooseAbstractMemberRule>
  */
 final class LooseAbstractMemberRuleTest extends PHPStanRuleTest
 {

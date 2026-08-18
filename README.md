@@ -5,7 +5,7 @@ Shared formatting and static analysis configuration.
 This package provides:
 
 - **[dPrint](https://dprint.dev/)** formatting via a shared `dprint.json`
-- **[PHPStan](https://phpstan.org/)** at level `9`, with custom rules for native PHPDoc member contracts (`@method`, `@property`, `@const`), `@abstract`, `@static`, `@singleton`, `@disallows`, sealed trait methods, and configurable disallowed function calls
+- **[PHPStan](https://phpstan.org/)** at level `9`, with custom rules for native PHPDoc member contracts (`@method`, `@property`, `@const`), `@abstract`, `@static`, `@singleton`, `@initializer`, `@disallows`, sealed trait methods, and configurable disallowed function calls
 
 The conventions here prioritize ergonomics over PSR alignment.
 
@@ -191,6 +191,52 @@ Subclasses inherit the constraint from a tagged parent. A `@singleton` trait imp
 
 Reported with the `singleton.missingBase` identifier.
 
+### `@initializer` tag
+
+Mark a method that initializes readonly or typed properties on behalf of `__construct` — common when a trait helper snapshots state the constructor assigns.
+
+PHPStan treats tagged methods as [additional constructors](https://phpstan.org/config-reference#additionalconstructors), clearing false positives such as `property.uninitializedReadonly` and `property.readOnlyAssignNotInConstructor` when init lives in a trait helper instead of literally in `__construct`.
+
+Tag the **init method** (own line, no arguments). A trait tag propagates to every class that uses it.
+
+```php
+trait ExceptionTrait
+{
+    protected readonly array $context;
+
+    /**
+     * @initializer
+     */
+    final protected function _context_snapshot(?array $context = null): void
+    {
+        $this->context = Snapshot::context($context ?? []);
+    }
+}
+
+final class RuntimeException extends \RuntimeException
+{
+    use ExceptionTrait;
+
+    public function __construct(?array $context = null)
+    {
+        $this->_context_snapshot($context);
+    }
+}
+```
+
+Rules:
+
+- Tagged methods must be called from `__construct` (or another `@initializer` method).
+- Methods newly introduced by a class or a trait it uses (that no parent already exposes) must be invoked directly as `$this->method()` from `__construct`. Calls inside closures do not count.
+- Do not tag `__construct` itself or static methods.
+
+Reported identifiers:
+
+- `initializer.calledOutsideConstructor`
+- `initializer.notCalledFromConstructor`
+- `initializer.staticMethod`
+- `initializer.redundant`
+
 ### `@disallows` tag
 
 Mark methods that the annotated type — and every consumer — must not end up with. Useful when declaring a method would change engine behaviour (e.g. `__toString()` → `Stringable`) or when a façade must not expose certain entry points.
@@ -295,7 +341,7 @@ Dynamic calls (`$fn()`), method calls, and static method calls are not checked. 
 
 The package ships `.phpstorm.meta.php`.
 
-PhpStorm recognizes `@const`, `@abstract`, `@static`, `@singleton`, and `@disallows` in docblocks (in addition to the built-in `@method` and `@property` support).
+PhpStorm recognizes `@const`, `@abstract`, `@static`, `@singleton`, `@initializer`, and `@disallows` in docblocks (in addition to the built-in `@method` and `@property` support).
 
 ## Validation
 

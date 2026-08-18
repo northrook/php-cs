@@ -6,10 +6,10 @@ namespace Tests\Rules;
 
 use Northrook\PHPStan\FinalTraitMethodRule;
 use PHPStan\Rules\Rule;
-use Tests\PHPStanRuleTest;
+use Tests\Support\PHPStanRuleTest;
 
 /**
- * @extends PHPStanRuleTest<FinalTraitMethodRule>
+ * @extends \Tests\Support\PHPStanRuleTest<FinalTraitMethodRule>
  */
 final class FinalTraitMethodRuleTest extends PHPStanRuleTest
 {

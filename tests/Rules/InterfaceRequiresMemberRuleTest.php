@@ -6,10 +6,10 @@ namespace Tests\Rules;
 
 use Northrook\PHPStan\InterfaceRequiresMemberRule;
 use PHPStan\Rules\Rule;
-use Tests\PHPStanRuleTest;
+use Tests\Support\PHPStanRuleTest;
 
 /**
- * @extends PHPStanRuleTest<InterfaceRequiresMemberRule>
+ * @extends \Tests\Support\PHPStanRuleTest<InterfaceRequiresMemberRule>
  */
 final class InterfaceRequiresMemberRuleTest extends PHPStanRuleTest
 {

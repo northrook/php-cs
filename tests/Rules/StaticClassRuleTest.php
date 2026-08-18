@@ -6,10 +6,10 @@ namespace Tests\Rules;
 
 use Northrook\PHPStan\StaticClassRule;
 use PHPStan\Rules\Rule;
-use Tests\PHPStanRuleTest;
+use Tests\Support\PHPStanRuleTest;
 
 /**
- * @extends PHPStanRuleTest<StaticClassRule>
+ * @extends \Tests\Support\PHPStanRuleTest<StaticClassRule>
  */
 final class StaticClassRuleTest extends PHPStanRuleTest
 {

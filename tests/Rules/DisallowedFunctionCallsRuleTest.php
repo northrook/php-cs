@@ -6,10 +6,10 @@ namespace Tests\Rules;
 
 use Northrook\PHPStan\DisallowedFunctionCallsRule;
 use PHPStan\Rules\Rule;
-use Tests\PHPStanRuleTest;
+use Tests\Support\PHPStanRuleTest;
 
 /**
- * @extends PHPStanRuleTest<DisallowedFunctionCallsRule>
+ * @extends \Tests\Support\PHPStanRuleTest<DisallowedFunctionCallsRule>
  */
 final class DisallowedFunctionCallsRuleTest extends PHPStanRuleTest
 {

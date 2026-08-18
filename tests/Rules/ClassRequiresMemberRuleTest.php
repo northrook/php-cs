@@ -6,10 +6,10 @@ namespace Tests\Rules;
 
 use Northrook\PHPStan\ClassRequiresMemberRule;
 use PHPStan\Rules\Rule;
-use Tests\PHPStanRuleTest;
+use Tests\Support\PHPStanRuleTest;
 
 /**
- * @extends PHPStanRuleTest<ClassRequiresMemberRule>
+ * @extends \Tests\Support\PHPStanRuleTest<ClassRequiresMemberRule>
  */
 final class ClassRequiresMemberRuleTest extends PHPStanRuleTest
 {

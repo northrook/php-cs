@@ -6,10 +6,10 @@ namespace Tests\Rules;
 
 use Northrook\PHPStan\DisallowsMethodRule;
 use PHPStan\Rules\Rule;
-use Tests\PHPStanRuleTest;
+use Tests\Support\PHPStanRuleTest;
 
 /**
- * @extends PHPStanRuleTest<DisallowsMethodRule>
+ * @extends \Tests\Support\PHPStanRuleTest<DisallowsMethodRule>
  */
 final class DisallowsMethodRuleTest extends PHPStanRuleTest
 {
