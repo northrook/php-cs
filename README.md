@@ -173,7 +173,7 @@ Reported with the `staticClass.publicConstructor` identifier.
 
 ### `@singleton` tag
 
-Mark a class (or trait) as a singleton façade. It must extend `Northrook\Contracts\Singleton` (from [`northrook/core-contracts`](https://github.com/northrook/core-contracts)).
+Mark a class (or trait) as a singleton façade. It must extend `Northrook\Singleton` (from [`northrook/core-contracts`](https://github.com/northrook/core-contracts)).
 
 ```php
 /**

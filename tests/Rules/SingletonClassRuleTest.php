@@ -17,7 +17,7 @@ final class SingletonClassRuleTest extends PHPStanRuleTest
     {
         $this->expect(__DIR__ . '/../Cases/SingletonClass/MissingBase.php', [
             [
-                'Class Tests\Cases\SingletonClass\MissingBase is @singleton but does not extend Northrook\Contracts\Singleton.',
+                'Class Tests\Cases\SingletonClass\MissingBase is @singleton but does not extend Northrook\Singleton.',
                 10,
                 'Imposed by class Tests\Cases\SingletonClass\MissingBase.',
             ],
@@ -43,7 +43,7 @@ final class SingletonClassRuleTest extends PHPStanRuleTest
     {
         $this->expect(__DIR__ . '/../Cases/SingletonClass/SubclassMissingBase.php', [
             [
-                'Class Tests\Cases\SingletonClass\SubclassMissingBase is @singleton but does not extend Northrook\Contracts\Singleton.',
+                'Class Tests\Cases\SingletonClass\SubclassMissingBase is @singleton but does not extend Northrook\Singleton.',
                 7,
                 'Imposed by abstract class Tests\Cases\SingletonClass\BadSingletonParent.',
             ],
@@ -54,7 +54,7 @@ final class SingletonClassRuleTest extends PHPStanRuleTest
     {
         $this->expect(__DIR__ . '/../Cases/SingletonClass/UsesSingletonTraitMissing.php', [
             [
-                'Class Tests\Cases\SingletonClass\UsesSingletonTraitMissing is @singleton but does not extend Northrook\Contracts\Singleton.',
+                'Class Tests\Cases\SingletonClass\UsesSingletonTraitMissing is @singleton but does not extend Northrook\Singleton.',
                 7,
                 'Imposed by trait Tests\Cases\SingletonClass\SingletonTrait.',
             ],
@@ -70,7 +70,7 @@ final class SingletonClassRuleTest extends PHPStanRuleTest
     {
         $this->expect(__DIR__ . '/../Cases/SingletonClass/UsesNestedSingletonTraitMissing.php', [
             [
-                'Class Tests\Cases\SingletonClass\UsesNestedSingletonTraitMissing is @singleton but does not extend Northrook\Contracts\Singleton.',
+                'Class Tests\Cases\SingletonClass\UsesNestedSingletonTraitMissing is @singleton but does not extend Northrook\Singleton.',
                 7,
                 'Imposed by trait Tests\Cases\SingletonClass\NestedSingletonTrait.',
             ],

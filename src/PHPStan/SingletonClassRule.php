@@ -13,8 +13,7 @@ use PHPStan\Rules\{Rule, RuleError};
 use PHPStan\ShouldNotHappenException;
 
 /**
- * Classes tagged `@singleton` (or constrained via parent/trait) must extend
- * {@see \Northrook\Contracts\Singleton}.
+ * Classes tagged `@singleton` (or constrained via parent/trait) must extend {@see \Northrook\Singleton}.
  *
  * @implements Rule<Class_>
  */
@@ -25,7 +24,7 @@ final class SingletonClassRule implements Rule
 
     private const string TAG = '@singleton';
 
-    private const string BASE = 'Northrook\\Contracts\\Singleton';
+    private const string BASE = 'Northrook\\Singleton';
 
     public function __construct(
         private readonly ReflectionProvider $reflectionProvider,
